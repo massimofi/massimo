@@ -656,36 +656,10 @@ function initHome() {
         const jitter = (Math.random() - 0.5) * 30;
         setTimeout(typeNext, typeSpeed + jitter);
       } else {
-        // Blink a moment, then fade caret, then recede the whole name
-        setTimeout(() => {
-          caret.style.transition = 'opacity 0.4s ease';
-          caret.style.opacity = '0';
-        }, 1400);
-        setTimeout(() => {
-          if (window.anime) {
-            anime({
-              targets: nameEl,
-              opacity: [1, 0.08],
-              translateY: [0, -28],
-              scale: [1, 0.9],
-              duration: 1100,
-              easing: 'easeInOutQuart',
-            });
-            // Gently reveal a scroll cue so the hero doesn't look empty
-            anime({
-              targets: '.hero__cue',
-              opacity: [0, 0.6],
-              translateY: [10, 0],
-              duration: 900,
-              delay: 700,
-              easing: 'easeOutQuart',
-            });
-          } else {
-            nameEl.style.transition = 'opacity 1s ease, transform 1s ease';
-            nameEl.style.opacity = '0.08';
-            nameEl.style.transform = 'translateY(-28px) scale(0.9)';
-          }
-        }, 2400);
+        // Typing done — stop the blink and hide the caret. Name stays as-is.
+        caret.style.animation = 'none';
+        caret.style.transition = 'opacity 0.25s ease';
+        caret.style.opacity = '0';
       }
     };
     setTimeout(typeNext, startDelay);
