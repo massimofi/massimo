@@ -1165,95 +1165,71 @@ a { color: inherit; }
   gap: 10px;
 }
 
-.resume__visual {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  border: 1px solid var(--fg-trace);
-  overflow: hidden;
-  background: var(--bg);
-  cursor: default;
+/* Technical Toolkit — skill icon grid inside .resume__aside */
+.toolkit { width: 100%; }
+
+.toolkit__title {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2vw, 26px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+  color: #111111;
+  margin-bottom: 16px;
 }
 
-.paper-fan {
-  position: absolute;
-  inset: 0;
+.toolkit__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.toolkit__item {
+  padding: 22px 14px 16px;
+  border: 1px solid #dcdcdc;
+  background: #ffffff;
+  color: var(--navy);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  cursor: default;
+  transition: transform 0.35s var(--ease-out),
+              background 0.35s var(--ease-out),
+              color 0.35s var(--ease-out),
+              border-color 0.35s var(--ease-out);
 }
 
-.paper-fan__page {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 56%;
-  aspect-ratio: 8.5 / 11;
-  background: var(--fg);
-  border: 1px solid rgba(10, 22, 40, 0.2);
-  padding: 12% 10%;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
-  transition: transform 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out);
-}
-
-/* Base fan — four pages splayed left to right */
-.paper-fan__page:nth-child(1) {
-  transform: translate(-50%, -50%) translate(-44px, 14px) rotate(-9deg);
-  z-index: 1;
-}
-.paper-fan__page:nth-child(2) {
-  transform: translate(-50%, -50%) translate(-16px, 6px) rotate(-3deg);
-  z-index: 2;
-}
-.paper-fan__page:nth-child(3) {
-  transform: translate(-50%, -50%) translate(16px, 2px) rotate(3deg);
-  z-index: 3;
-}
-.paper-fan__page:nth-child(4) {
-  transform: translate(-50%, -50%) translate(44px, -6px) rotate(9deg);
-  z-index: 4;
-}
-
-/* Hover: spread the stack open, matching project-card thumb behavior */
-.resume__visual:hover .paper-fan__page:nth-child(1) {
-  transform: translate(-50%, -50%) translate(-92px, 28px) rotate(-16deg);
-}
-.resume__visual:hover .paper-fan__page:nth-child(2) {
-  transform: translate(-50%, -50%) translate(-32px, 10px) rotate(-6deg);
-}
-.resume__visual:hover .paper-fan__page:nth-child(3) {
-  transform: translate(-50%, -50%) translate(32px, 6px) rotate(6deg);
-}
-.resume__visual:hover .paper-fan__page:nth-child(4) {
-  transform: translate(-50%, -50%) translate(92px, -14px) rotate(16deg);
-}
-
-/* Abstract "content" inside each page — header bar + faint text lines */
-.paper-fan__header {
-  height: 8%;
+.toolkit__item:hover {
+  transform: scale(1.05);
   background: var(--navy);
-  margin-bottom: 10%;
-  border-radius: 1px;
+  color: var(--fg);
+  border-color: var(--navy);
 }
 
-.paper-fan__line {
-  height: 3%;
-  background: rgba(10, 22, 40, 0.14);
-  margin-bottom: 7%;
-  border-radius: 1px;
+.toolkit__icon {
+  width: 40px;
+  height: 40px;
+  color: inherit;
+  transition: transform 0.5s var(--ease-out);
 }
-.paper-fan__line--short { width: 58%; }
-.paper-fan__line--med   { width: 78%; }
 
-.resume__visual-label {
-  position: absolute;
-  left: 14px;
-  bottom: 12px;
+.toolkit__item:hover .toolkit__icon {
+  transform: rotate(6deg);
+}
+
+.toolkit__label {
   font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.3em;
+  font-size: 10px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--fg-dim);
-  z-index: 10;
+  color: inherit;
+}
+
+/* Fifth item spans the full row so the grid lands cleanly with 5 items */
+.toolkit__item:nth-child(5) {
+  grid-column: 1 / -1;
 }
 
 /* ============================================
@@ -1363,7 +1339,6 @@ a { color: inherit; }
     text-align: left;
     white-space: normal;
   }
-  .resume__visual { aspect-ratio: 16 / 10; }
 
   .contact {
     padding: 80px 20px 60px;
