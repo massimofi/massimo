@@ -597,6 +597,43 @@ a { color: inherit; }
   transform: translate(4px, -4px);
 }
 
+/* Animated SVG icons on each contact card */
+.contact-icon {
+  width: 64px;
+  height: 48px;
+  color: var(--fg);
+  align-self: flex-start;
+  margin: 8px 0 0;
+  display: block;
+  overflow: visible;  /* so the email flap can fly above the rect */
+}
+
+/* Email — flap lifts up, letter peeks out */
+.ci-flap-closed, .ci-flap-open, .ci-letter {
+  transition: opacity 0.4s var(--ease-out), transform 0.45s var(--ease-out);
+}
+.ci-flap-open { opacity: 0; }
+.ci-letter    { opacity: 0; transform: translateY(6px); }
+.contact-card:hover .ci-flap-closed { opacity: 0; }
+.contact-card:hover .ci-flap-open   { opacity: 1; }
+.contact-card:hover .ci-letter      { opacity: 0.9; transform: translateY(0); }
+
+/* GitHub — right eye winks into a dash */
+.ci-gh-wink { opacity: 0; }
+.ci-gh-eye,
+.ci-gh-wink { transition: opacity 0.25s var(--ease-out); }
+.contact-card:hover .ci-gh-eye--right { opacity: 0; }
+.contact-card:hover .ci-gh-wink { opacity: 1; }
+
+/* LinkedIn — whole mark flips in 3D */
+.contact-icon--li {
+  transform: perspective(600px) rotateY(0);
+  transition: transform 0.7s var(--ease-out);
+}
+.contact-card:hover .contact-icon--li {
+  transform: perspective(600px) rotateY(180deg);
+}
+
 .contact-card__name {
   font-family: var(--serif);
   font-size: clamp(28px, 3vw, 44px);
