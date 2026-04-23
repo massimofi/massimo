@@ -14,8 +14,8 @@
   </a>
   <ul class="nav__links">
     <li><a href="#projects" data-section="projects">Projects</a></li>
+    <li><a href="#resume" data-section="resume">Resume</a></li>
     <li><a href="#contact" data-section="contact">Contact</a></li>
-    <li><a href="resume.html" data-page="resume">Resume</a></li>
   </ul>
 </nav>
 
@@ -197,6 +197,198 @@
       <div class="progress-bar">
         <div class="progress-bar__fill"></div>
       </div>
+    </div>
+  </section>
+
+  <section class="resume" id="resume">
+    <div class="resume__header">
+      <div>
+        <div class="resume__eyebrow">Profile</div>
+        <h2 class="resume__heading">Resume.</h2>
+      </div>
+      <div class="resume__count">CV / PDF</div>
+    </div>
+
+    <div class="resume__split">
+      <article class="resume__document" aria-label="Resume content">
+        <header class="rd__head">
+          <h3 class="rd__name">Massimo Arellano</h3>
+          <p class="rd__line">Laguna Beach, CA · (949) 342-0502 · massimoarellano@icloud.com</p>
+        </header>
+
+        <section class="rd__section">
+          <div class="rd__section-title">Education</div>
+          <div class="rd__entry">
+            <div class="rd__entry-head">
+              <div class="rd__entry-main">
+                <div class="rd__entry-title">California State Polytechnic University, Pomona</div>
+                <div class="rd__entry-sub"><em>B.S. Business Administration, Finance · Minor in Mathematics</em></div>
+              </div>
+              <div class="rd__entry-meta">
+                <div>Expected May 2027</div>
+                <div>GPA: 3.85</div>
+              </div>
+            </div>
+            <ul class="rd__bullets">
+              <li>Honors: Beta Alpha Psi, Beta Gamma Sigma, President's List (2024–2025)</li>
+              <li>Certs: Bloomberg Market Concepts, SQL Intermediate (HackerRank), ML + Pandas (Kaggle)</li>
+              <li>Coursework: Statistical Foundations for Business Analytics, Data Analytics in Finance, Linear Algebra, Calculus III, Investments, Financial Accounting</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="rd__section">
+          <div class="rd__section-title">Experience</div>
+          <div class="rd__entry">
+            <div class="rd__entry-head">
+              <div class="rd__entry-main">
+                <div class="rd__entry-title">Revolv3 — SaaS Payment Processor</div>
+                <div class="rd__entry-sub"><em>Fintech Data Analytics Intern</em></div>
+              </div>
+              <div class="rd__entry-meta">
+                <div>Laguna Beach, CA</div>
+                <div>Jun 2025 – Aug 2025</div>
+              </div>
+            </div>
+            <ul class="rd__bullets">
+              <li>Automated customer invoicing by extracting Power BI datasets and integrating contract terms with approval volumes.</li>
+              <li>Built Excel revenue and transaction volume forecasts, identifying 30–40% MoM growth across 3 months.</li>
+              <li>Created Excel pivot tables for effective collection rates, delivering weekly KPI reports to 100+ merchants.</li>
+              <li>Conducted trend analysis on customer transaction volume, flagging 10+ accounts with declining activity for sales.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="rd__section">
+          <div class="rd__section-title">Projects &amp; Competitions</div>
+
+          <div class="rd__entry">
+            <div class="rd__entry-head">
+              <div class="rd__entry-main">
+                <div class="rd__entry-title">Customer Data Integration Consulting Proposal</div>
+                <div class="rd__entry-sub"><em>MISSA ITC Competition · Team Lead · 2nd Place</em></div>
+              </div>
+              <div class="rd__entry-meta"><div>April 2026</div></div>
+            </div>
+            <ul class="rd__bullets">
+              <li>Led 5-person team to 2nd place delivering an 18-month customer data integration proposal as lead data analyst.</li>
+              <li>Performed full EDA in Python (pandas) on 2,500+ transactions across 363 customers and 9 data sources.</li>
+              <li>Surfaced a 13.5× lifetime value gap between single- and multi-channel customers via segmentation analysis.</li>
+              <li>Designed 5 Power BI dashboards spanning 40+ KPIs across executive, cross-channel, and pipeline health views.</li>
+              <li>Architected cloud data stack (Snowflake, dbt, Segment, Fivetran, LiveRamp) with phased 18-month rollout plan.</li>
+            </ul>
+          </div>
+
+          <div class="rd__entry">
+            <div class="rd__entry-head">
+              <div class="rd__entry-main">
+                <div class="rd__entry-title">UrbanDive — SF Bay Environmental Decision Tool</div>
+                <div class="rd__entry-sub"><em>Oracle Datathon · 2nd of 7 Teams</em></div>
+              </div>
+              <div class="rd__entry-meta"><div>April 2026</div></div>
+            </div>
+            <ul class="rd__bullets">
+              <li>Placed 2nd of 7 teams at Oracle HQ building UrbanDive on Oracle Autonomous Database 26ai after AI World Summit.</li>
+              <li>Wrote SQL views and join queries unifying 2 multi-table datasets (urban activity + environmental monitoring).</li>
+              <li>Trained Oracle AutoML model on unified tables to predict water, air, and conservation scores for Bay locations.</li>
+              <li>Built color-coded APEX map interface surfacing live ML predictions on click for any location in the Bay Area.</li>
+            </ul>
+          </div>
+
+          <div class="rd__entry">
+            <div class="rd__entry-head">
+              <div class="rd__entry-main">
+                <div class="rd__entry-title">Massimo DCF — Full-Stack DCF Valuation Platform</div>
+                <div class="rd__entry-sub"><em>Personal Project</em></div>
+              </div>
+              <div class="rd__entry-meta"><div>Nov 2025 – Present</div></div>
+            </div>
+            <ul class="rd__bullets">
+              <li>Built ETL pipeline ingesting SEC EDGAR 10-K/10-Q filings and yfinance market data into PostgreSQL for 500 equities.</li>
+              <li>Engineered async FastAPI backend with SSE streaming and WebSocket price ticks; React/TypeScript/Vite frontend.</li>
+              <li>Designed Postgres schema with caching layer and custom DCF engine handling financials/REITs and NaN edge cases.</li>
+              <li>Implemented 10,000-path Monte Carlo simulation and WACC × growth sensitivity heatmaps via Recharts visualizations.</li>
+            </ul>
+          </div>
+
+          <div class="rd__entry">
+            <div class="rd__entry-head">
+              <div class="rd__entry-main">
+                <div class="rd__entry-title">Healthcare Budget Optimization Model</div>
+                <div class="rd__entry-sub"><em>Data Never Dies Datathon · 2nd of 10 Teams</em></div>
+              </div>
+              <div class="rd__entry-meta"><div>March 2026</div></div>
+            </div>
+            <ul class="rd__bullets">
+              <li>Built Random Forest regressor (400 trees) on healthcare data across 20 countries and 24 years to predict system strain.</li>
+              <li>Engineered weighted Strain Index combining 3 pillars (burden, capacity gap, affordability gap) to score country need.</li>
+              <li>Designed greedy ROI optimizer deploying $100M across 81 investment decisions to maximize strain reduction per dollar.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="rd__section">
+          <div class="rd__section-title">Leadership &amp; Activities</div>
+          <div class="rd__entry">
+            <div class="rd__entry-head">
+              <div class="rd__entry-main">
+                <div class="rd__entry-title">Bronco Investment Club, Cal Poly Pomona</div>
+                <div class="rd__entry-sub"><em>Treasurer</em></div>
+              </div>
+              <div class="rd__entry-meta">
+                <div>Pomona, CA</div>
+                <div>Nov 2025 – Present</div>
+              </div>
+            </div>
+            <ul class="rd__bullets">
+              <li>Secured $3,400 in semester funding by building detailed expense projections and presenting to the executive board.</li>
+              <li>Led revision of 5+ line-item budget proposal in Excel, coordinating with club president and ASI Treasurer.</li>
+              <li>Directed fundraising efforts that secured supplemental funding beyond the initial semester allocation.</li>
+            </ul>
+          </div>
+          <div class="rd__entry">
+            <div class="rd__entry-head">
+              <div class="rd__entry-main">
+                <div class="rd__entry-title">CPP Pickleball Club</div>
+                <div class="rd__entry-sub"><em>Vice President</em></div>
+              </div>
+              <div class="rd__entry-meta">
+                <div>Pomona, CA</div>
+                <div>2026 – 2027</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rd__section">
+          <div class="rd__section-title">Skills</div>
+          <ul class="rd__bullets rd__bullets--inline">
+            <li><strong>Languages &amp; Databases:</strong> SQL, PostgreSQL, Python (pandas, NumPy, scikit-learn, matplotlib), Excel (VLOOKUP, Pivot Tables)</li>
+            <li><strong>Visualization &amp; BI:</strong> Power BI, Streamlit, Metabase, Oracle APEX</li>
+            <li><strong>Analytics:</strong> ETL, exploratory data analysis, regression modeling, dashboards, segmentation, statistical analysis</li>
+            <li><strong>Interests:</strong> Sports analytics, basketball, snowboarding, pickleball</li>
+          </ul>
+        </section>
+      </article>
+
+      <aside class="resume__aside">
+        <div class="resume__card">
+          <div class="resume__card-eyebrow">/ Download</div>
+          <h3 class="resume__card-title">Resume</h3>
+          <p class="resume__card-desc">
+            Full CV — education, work experience, competitions, personal projects, and skills.
+            Grab a copy for your records, or read the HTML version alongside.
+          </p>
+          <div class="resume__buttons">
+            <a href="resume.pdf" download class="project-card__action project-card__action--primary">Download PDF ↓</a>
+            <!-- TODO: wire a DOCX export once a .docx is produced -->
+          </div>
+        </div>
+        <div class="resume__visual">
+          <canvas class="resume__poly" aria-hidden="true"></canvas>
+          <div class="resume__visual-label">Oct · III</div>
+        </div>
+      </aside>
     </div>
   </section>
 
