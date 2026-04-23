@@ -753,7 +753,7 @@ function initProjectsScroll() {
       trigger: '.projects__horizontal',
       start: 'top top',
       // Extra distance so the dwell segments have room to feel
-      end: () => `+=${totalWidth() * 1.6}`,
+      end: () => `+=${totalWidth() * 1.95}`,
       pin: true,
       scrub: true,
       invalidateOnRefresh: true,
@@ -761,8 +761,11 @@ function initProjectsScroll() {
   });
 
   // 4 cards means 3 transitions. Each segment: dwell on card, then travel to next.
-  const holdFraction = 0.35;   // fraction of each segment spent "holding" on a card
-  const travelFraction = 0.65; // fraction spent moving to next card
+  // Tuning: with end=1.95 * totalWidth and these fractions, hold-per-card in
+  // scroll units is 0.52/4.03 * 1.95 ≈ 0.252 of totalWidth (was 0.167 before,
+  // so ~50% more dwell per card). Travel-per-card stays near 0.315 — unchanged.
+  const holdFraction = 0.52;
+  const travelFraction = 0.65;
   const segments = n - 1;      // number of transitions
 
   for (let i = 0; i < segments; i++) {
@@ -785,7 +788,7 @@ function initProjectsScroll() {
     ScrollTrigger.create({
       trigger: '.projects__horizontal',
       start: 'top top',
-      end: () => `+=${totalWidth() * 1.6}`,
+      end: () => `+=${totalWidth() * 1.95}`,
       scrub: true,
       onEnter: () => progressBar && progressBar.classList.add('is-active'),
       onEnterBack: () => progressBar && progressBar.classList.add('is-active'),
