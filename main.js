@@ -404,6 +404,7 @@ function initProjectsScroll() {
   window.__projectsScrollTween = tl;
   const scrollTween = tl;
 
+  const progressBar = document.querySelector('.progress-bar');
   const progressFill = document.querySelector('.progress-bar__fill');
   if (progressFill) {
     ScrollTrigger.create({
@@ -411,6 +412,10 @@ function initProjectsScroll() {
       start: 'top top',
       end: () => `+=${totalWidth() * 1.6}`,
       scrub: true,
+      onEnter: () => progressBar && progressBar.classList.add('is-active'),
+      onEnterBack: () => progressBar && progressBar.classList.add('is-active'),
+      onLeave: () => progressBar && progressBar.classList.remove('is-active'),
+      onLeaveBack: () => progressBar && progressBar.classList.remove('is-active'),
       onUpdate: (self) => {
         progressFill.style.width = (self.progress * 100) + '%';
       }

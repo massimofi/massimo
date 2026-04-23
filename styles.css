@@ -53,12 +53,15 @@ a { color: inherit; }
 .nav {
   position: fixed;
   top: 0; left: 0; right: 0;
-  padding: 24px 32px;
+  padding: 20px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 100;
-  mix-blend-mode: difference;
+  z-index: 200;
+  background: rgba(10, 10, 10, 0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--fg-trace);
 }
 
 .nav__logo {
@@ -377,7 +380,12 @@ a { color: inherit; }
   height: 1px;
   background: var(--fg-trace);
   z-index: 10;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out);
+  pointer-events: none;
 }
+
+.progress-bar.is-active { opacity: 1; }
 
 .progress-bar__fill {
   height: 100%;
