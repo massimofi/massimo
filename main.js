@@ -442,9 +442,14 @@ function initHeroChart() {
     sphereVerts[i] = [Math.cos(theta) * r * SPHERE_R, y * SPHERE_R, Math.sin(theta) * r * SPHERE_R];
   }
 
+  // Rotation state:
+  //   target* = what mouse position wants
+  //   current* = what the draw loop actually uses (lerped toward target each frame)
+  // morph:  0 = candles, 1 = sphere (driven by scroll in task 2's label-strip).
   const state = {
-    ambientX: 0, ambientY: 0, ambientZ: 0,
-    morph: 0,  // 0 = candles, 1 = sphere
+    targetRx: 0, targetRy: 0,
+    currentRx: 0, currentRy: 0,
+    morph: 0,
   };
 
   const rotate = (v, rx, ry, rz) => {
@@ -461,7 +466,12 @@ function initHeroChart() {
 
   const smoothstep = (t) => t * t * (3 - 2 * t);
 
+  const LERP = 0.08;
   const draw = () => {
+    // Lerp toward mouse target each frame so the tilt feels weighted
+    state.currentRx += (state.targetRx - state.currentRx) * LERP;
+    state.currentRy += (state.targetRy - state.currentRy) * LERP;
+
     ctx.clearRect(0, 0, w, h);
     const cx = w / 2, cy = h / 2;
     // Candle row spans ~5 world units per side; unit = 8.5% of min(w,h)
@@ -469,7 +479,7 @@ function initHeroChart() {
     // perspective amplification) inside the canvas half-extent.
     const unit = Math.min(w, h) * 0.085;
     const focal = unit * 15;
-    const rx = state.ambientX, ry = state.ambientY, rz = state.ambientZ;
+    const rx = state.currentRx, ry = state.currentRy, rz = 0;
     const m = smoothstep(Math.max(0, Math.min(1, state.morph)));
 
     const pts = new Array(N);
@@ -520,12 +530,25 @@ function initHeroChart() {
   const loop = () => { draw(); requestAnimationFrame(loop); };
   requestAnimationFrame(loop);
 
-  // Ambient rotation — irrational durations so the pattern never repeats
-  if (window.anime) {
-    anime({ targets: state, ambientY: Math.PI * 2, duration: 24000, easing: 'linear', loop: true });
-    anime({ targets: state, ambientX: Math.PI * 2, duration: 38000, easing: 'linear', loop: true });
-    anime({ targets: state, ambientZ: Math.PI * 2, duration: 60000, easing: 'linear', loop: true });
-  }
+  // Mouse parallax — tilt up to ±10° on X and Y axes, centered on the
+  // viewport. Listen on window so events fire regardless of which section
+  // is under the cursor; the canvas is the dominant element at the top
+  // of the page, so it stays reactive until the user scrolls past it.
+  const MAX_TILT = Math.PI / 18; // 10°
+  const onMouseMove = (e) => {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const dx = (e.clientX - vw / 2) / (vw / 2);
+    const dy = (e.clientY - vh / 2) / (vh / 2);
+    state.targetRy = Math.max(-1, Math.min(1, dx)) * MAX_TILT;
+    state.targetRx = -Math.max(-1, Math.min(1, dy)) * MAX_TILT;
+  };
+  const resetTilt = () => {
+    state.targetRx = 0;
+    state.targetRy = 0;
+  };
+  window.addEventListener('mousemove', onMouseMove);
+  // When the cursor leaves the window entirely, ease back to neutral.
+  document.addEventListener('mouseleave', resetTilt);
 
   requestAnimationFrame(() => canvas.classList.add('is-ready'));
 
