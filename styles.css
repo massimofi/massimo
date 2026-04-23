@@ -121,9 +121,22 @@ a { color: inherit; }
 /* ============================================
    HERO
    ============================================ */
+/* Hero is tall so the candle -> sphere morph has room to scrub.
+   Inner .hero__viewport is sticky at top: 0 for 100vh so the canvas
+   and the name stay fixed in the viewport while the user scrolls
+   through the morph, then the whole thing rolls up with the page
+   once the sticky range ends. */
 .hero {
   position: relative;
-  min-height: 100vh;
+  height: 150vh;
+  overflow: visible;
+}
+
+.hero__viewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,30 +148,18 @@ a { color: inherit; }
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  width: 100%;
-  height: 100%;
 }
-
-/* Fixed viewport-spanning stage that holds the hero chart.
-   Visible while the user is inside the hero via .is-active. */
-.hero-stage {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.7s var(--ease-out);
-}
-.hero-stage.is-active { opacity: 1; }
 
 .hero__poly {
-  /* ~95% of min viewport dim so the object reads as the dominant visual */
-  width: min(95vh, 95vw);
-  height: min(95vh, 95vw);
-  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Dominant visual: the candle row stretches the hero horizontally */
+  width: min(95vh, 98vw);
+  height: min(95vh, 98vw);
+  z-index: 1;
+  pointer-events: none;
   opacity: 0;
   transition: opacity 1.2s var(--ease-out);
   will-change: opacity;
@@ -168,7 +169,7 @@ a { color: inherit; }
 
 .hero__content {
   position: relative;
-  z-index: 10;  /* above the fixed .hero-stage canvas (z-index 1) */
+  z-index: 10;  /* above the sibling canvas at z-index 1 */
   text-align: center;
   padding: 0 24px;
 }
@@ -1211,7 +1212,10 @@ a { color: inherit; }
   .nav__logo .surname { font-size: 15px; }
   .nav__links { gap: 16px; font-size: 9px; letter-spacing: 0.15em; }
 
-  .hero__poly { width: min(92vw, 92vw); height: min(92vw, 92vw); }
+  /* Shorter hero on mobile — 120vh is enough room for the morph to
+     complete without eating half the phone's scroll budget. */
+  .hero { height: 120vh; }
+  .hero__poly { width: 96vw; height: 96vw; }
 
   /* Vertical stack of project cards — no horizontal pin on mobile */
   .projects__horizontal {

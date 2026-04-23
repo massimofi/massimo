@@ -552,12 +552,10 @@ function initHeroChart() {
 
   requestAnimationFrame(() => canvas.classList.add('is-ready'));
 
-  // Hero-scoped morph: scrub candle → sphere across the hero section.
-  // The hero-stage canvas stays visible (.is-active class added on load)
-  // so there's no visibility gating tied to a separate section anymore.
-  const stage = document.querySelector('.hero-stage');
-  if (stage) stage.classList.add('is-active');
-
+  // Morph scrubs while the hero's sticky inner is still stuck at the
+  // viewport. Hero is 150vh and the sticky is 100vh, so sticky releases
+  // at 50vh of scroll — we complete the morph exactly there, and the
+  // finished sphere then scrolls up naturally with the rest of the hero.
   if (window.gsap && window.ScrollTrigger && hero) {
     gsap.registerPlugin(ScrollTrigger);
     gsap.to(state, {
@@ -566,22 +564,10 @@ function initHeroChart() {
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        end: 'bottom top',
-        scrub: 0.5,
+        end: () => `+=${window.innerHeight * 0.5}`,
+        scrub: 0.4,
         invalidateOnRefresh: true,
       },
-    });
-
-    // Fade the stage out once the user is well past the hero so the canvas
-    // doesn't keep rendering over projects.
-    ScrollTrigger.create({
-      trigger: hero,
-      start: 'top 90%',
-      end: 'bottom top',
-      onEnter:     () => stage && stage.classList.add('is-active'),
-      onEnterBack: () => stage && stage.classList.add('is-active'),
-      onLeave:     () => stage && stage.classList.remove('is-active'),
-      onLeaveBack: () => stage && stage.classList.remove('is-active'),
     });
   }
 
