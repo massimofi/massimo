@@ -141,28 +141,21 @@ a { color: inherit; }
   height: 100%;
 }
 
-.hero__ring {
+.hero__poly {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(90vh, 90vw);
-  height: min(90vh, 90vw);
+  width: min(86vh, 86vw);
+  height: min(86vh, 86vw);
   transform: translate(-50%, -50%);
   z-index: 1;
-  color: var(--fg);
   pointer-events: none;
-  opacity: 0.75;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-out);
+  will-change: transform, opacity;
 }
 
-.hero__ring-inner {
-  transform-origin: 300px 300px;
-  animation: ringRotate 80s linear infinite;
-}
-
-@keyframes ringRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+.hero__poly.is-ready { opacity: 0.85; }
 
 .hero__content {
   position: relative;

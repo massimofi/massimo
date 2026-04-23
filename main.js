@@ -356,6 +356,187 @@ function initHeroGrid() {
 }
 
 // ============================================
+// HERO POLYHEDRON (wireframe icosahedron)
+// Ambient rotation (anime.js) + scroll-driven tilt (ScrollTrigger)
+// ============================================
+function initHeroPoly() {
+  const canvas = document.querySelector('.hero__poly');
+  if (!canvas || canvas.dataset.init === 'done') return;
+  canvas.dataset.init = 'done';
+
+  const ctx = canvas.getContext('2d');
+  const hero = document.querySelector('.hero');
+  let w = 0, h = 0, dpr = 1;
+
+  const resize = () => {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = canvas.getBoundingClientRect();
+    w = rect.width; h = rect.height;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  resize();
+
+  // Icosahedron: 12 vertices, 30 edges. Golden-ratio rectangle construction.
+  const P = (1 + Math.sqrt(5)) / 2; // ~1.618
+  const V = [
+    [-1,  P,  0], [ 1,  P,  0], [-1, -P,  0], [ 1, -P,  0],
+    [ 0, -1,  P], [ 0,  1,  P], [ 0, -1, -P], [ 0,  1, -P],
+    [ P,  0, -1], [ P,  0,  1], [-P,  0, -1], [-P,  0,  1],
+  ];
+  // Edges: unique pairs at minimum distance (= 2 for this construction).
+  const E = [];
+  for (let i = 0; i < V.length; i++) {
+    for (let j = i + 1; j < V.length; j++) {
+      const dx = V[i][0] - V[j][0];
+      const dy = V[i][1] - V[j][1];
+      const dz = V[i][2] - V[j][2];
+      const d2 = dx*dx + dy*dy + dz*dz;
+      if (Math.abs(d2 - 4) < 0.001) E.push([i, j]);
+    }
+  }
+
+  // Rotation state — anime.js drives ambient; ScrollTrigger adds scroll tilt.
+  const state = {
+    ambientX: 0,
+    ambientY: 0,
+    ambientZ: 0,
+    scrollX: 0,
+    scrollY: 0,
+    scale: 1,
+  };
+
+  const rot = (v, rx, ry, rz) => {
+    let [x, y, z] = v;
+    // X
+    let c = Math.cos(rx), s = Math.sin(rx);
+    let y1 = y * c - z * s, z1 = y * s + z * c;
+    y = y1; z = z1;
+    // Y
+    c = Math.cos(ry); s = Math.sin(ry);
+    let x1 = x * c + z * s; z1 = -x * s + z * c;
+    x = x1; z = z1;
+    // Z
+    c = Math.cos(rz); s = Math.sin(rz);
+    x1 = x * c - y * s; y1 = x * s + y * c;
+    return [x1, y1, z];
+  };
+
+  const draw = () => {
+    ctx.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2;
+    const R = Math.min(w, h) * 0.38 * state.scale; // radius in px
+    const focal = R * 3.2;
+
+    const rx = state.ambientX + state.scrollX;
+    const ry = state.ambientY + state.scrollY;
+    const rz = state.ambientZ;
+
+    // Project vertices
+    const pts = V.map((v) => {
+      const r = rot(v, rx, ry, rz);
+      const zFactor = focal / (focal + r[2] * R);
+      return {
+        x: cx + r[0] * R * zFactor,
+        y: cy + r[1] * R * zFactor,
+        z: r[2], // normalized depth (-~1.9..1.9 for icosahedron with unit scale factor)
+        zFactor,
+      };
+    });
+
+    // Sort edges by average depth (painter's algo for fake-3D feel)
+    const edges = E.map(([a, b]) => ({
+      a, b,
+      avgZ: (pts[a].z + pts[b].z) / 2,
+    })).sort((e1, e2) => e1.avgZ - e2.avgZ); // back first
+
+    for (const e of edges) {
+      const A = pts[e.a], B = pts[e.b];
+      // Front edges brighter + thicker
+      const depth = (e.avgZ + 2) / 4; // 0..1, back..front
+      const alpha = 0.12 + depth * 0.58;
+      const width = 0.5 + depth * 1.4;
+      ctx.strokeStyle = `rgba(255, 251, 234, ${alpha})`;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      ctx.moveTo(A.x, A.y);
+      ctx.lineTo(B.x, B.y);
+      ctx.stroke();
+    }
+
+    // Tiny dot on each vertex, scale by depth
+    for (const p of pts) {
+      const depth = (p.z + 2) / 4;
+      const r = 1.3 + depth * 1.8;
+      ctx.fillStyle = `rgba(255, 251, 234, ${0.3 + depth * 0.5})`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  };
+
+  let rafId = null;
+  const loop = () => {
+    draw();
+    rafId = requestAnimationFrame(loop);
+  };
+  rafId = requestAnimationFrame(loop);
+
+  // Ambient rotation via anime.js — slow, continuous on all three axes.
+  if (window.anime) {
+    anime({
+      targets: state,
+      ambientY: Math.PI * 2,
+      duration: 24000,
+      easing: 'linear',
+      loop: true,
+    });
+    anime({
+      targets: state,
+      ambientX: Math.PI * 2,
+      duration: 38000,
+      easing: 'linear',
+      loop: true,
+    });
+    anime({
+      targets: state,
+      ambientZ: Math.PI * 2,
+      duration: 60000,
+      easing: 'linear',
+      loop: true,
+    });
+  }
+
+  // Reveal
+  requestAnimationFrame(() => canvas.classList.add('is-ready'));
+
+  // Scroll-driven tilt: as user scrolls through the hero, the poly tilts
+  // and scales as if being dragged by the scroll.
+  if (window.gsap && window.ScrollTrigger && hero) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(state, {
+      scrollX: Math.PI * 1.1,
+      scrollY: Math.PI * 0.8,
+      scale: 0.82,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.6,
+      },
+    });
+  }
+
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resize, 150);
+  });
+}
+
+// ============================================
 // PROJECTS HORIZONTAL SCROLL
 // ============================================
 function initProjectsScroll() {
@@ -490,6 +671,7 @@ function initHome() {
   }
 
   initHeroGrid();
+  initHeroPoly();
   initProjectsScroll();
   initCardTilt();
   initCardRipple();
