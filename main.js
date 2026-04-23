@@ -500,28 +500,208 @@ function initPoly(canvas, options = {}) {
   });
 }
 
-function initHeroPoly() {
-  initPoly(document.querySelector('.hero__poly'), {
-    shape: 'ico',
-    // Icosahedron vertices reach sqrt(1+phi^2)~1.9 from origin; with the
-    // new R*6 focal, max projection is ~2.0R. Radius 0.22 of the min
-    // canvas dimension keeps the full shape inside the canvas on all sides.
-    radiusFactor: 0.22,
-    scrollTrigger: {
-      trigger: '.hero',
-      start: 'top top',
-      end: 'bottom top',
-      scrub: 0.6,
-    },
-  });
-}
-
 function initResumePoly() {
   initPoly(document.querySelector('.resume__poly'), {
     shape: 'oct',
     // Octahedron only reaches 1.0 from origin; radius 0.32 leaves comfort margin.
     radiusFactor: 0.32,
     speed: 0.9,
+  });
+}
+
+// ============================================
+// HERO CHART — 3D candlesticks that morph into a wireframe sphere on scroll
+// ============================================
+function initHeroChart() {
+  const canvas = document.querySelector('.hero__poly');
+  if (!canvas || canvas.dataset.init === 'done') return;
+  canvas.dataset.init = 'done';
+
+  const ctx = canvas.getContext('2d');
+  const hero = document.querySelector('.hero');
+  let w = 0, h = 0, dpr = 1;
+
+  const resize = () => {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = canvas.getBoundingClientRect();
+    w = rect.width; h = rect.height;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+  resize();
+
+  // Seeded PRNG so the candle layout is the same every render
+  let seed = 1337;
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647;
+    return seed / 2147483647;
+  };
+
+  // Build 10 candles — each is a cuboid body + 2 wick line segments.
+  // 12 vertices/candle, 14 edges/candle: (12 cube edges + 2 wicks).
+  const NUM = 10;
+  const SPACING = 1.0;
+  const BODY_W = 0.55;
+  const BODY_D = 0.28;
+  const verts = [];
+  const edges = [];
+
+  for (let i = 0; i < NUM; i++) {
+    const x = (i - (NUM - 1) / 2) * SPACING;
+    const bodyH = 0.45 + rand() * 1.4;
+    const centerY = (rand() - 0.5) * 0.55;
+    const bodyTop = centerY + bodyH / 2;
+    const bodyBot = centerY - bodyH / 2;
+    const wickTop = bodyTop + 0.1 + rand() * 0.45;
+    const wickBot = bodyBot - 0.1 - rand() * 0.45;
+    const up = rand() > 0.45;
+    const base = verts.length;
+
+    const hx = BODY_W / 2, hz = BODY_D / 2;
+    verts.push([x - hx, bodyBot, -hz]); // 0 front-bot-left
+    verts.push([x + hx, bodyBot, -hz]); // 1 front-bot-right
+    verts.push([x + hx, bodyTop, -hz]); // 2 front-top-right
+    verts.push([x - hx, bodyTop, -hz]); // 3 front-top-left
+    verts.push([x - hx, bodyBot,  hz]); // 4 back-bot-left
+    verts.push([x + hx, bodyBot,  hz]); // 5 back-bot-right
+    verts.push([x + hx, bodyTop,  hz]); // 6 back-top-right
+    verts.push([x - hx, bodyTop,  hz]); // 7 back-top-left
+    verts.push([x, bodyTop, 0]);        // 8 top wick base
+    verts.push([x, wickTop, 0]);        // 9 top wick tip
+    verts.push([x, bodyBot, 0]);        // 10 bot wick base
+    verts.push([x, wickBot, 0]);        // 11 bot wick tip
+
+    const cubeEdges = [
+      [0,1],[1,2],[2,3],[3,0],
+      [4,5],[5,6],[6,7],[7,4],
+      [0,4],[1,5],[2,6],[3,7],
+    ];
+    for (const [a, b] of cubeEdges) edges.push({ a: base + a, b: base + b, up });
+    edges.push({ a: base + 8,  b: base + 9,  up });
+    edges.push({ a: base + 10, b: base + 11, up });
+  }
+
+  // Fibonacci-lattice sphere — one target point per candle vertex.
+  // The existing edges keep their vertex indices, so the same 140 edges
+  // that drew the candles now draw a mesh over the sphere surface.
+  const N = verts.length;
+  const SPHERE_R = 2.4;
+  const sphereVerts = new Array(N);
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < N; i++) {
+    const y = 1 - (i / (N - 1)) * 2;
+    const r = Math.sqrt(Math.max(0, 1 - y * y));
+    const theta = golden * i;
+    sphereVerts[i] = [Math.cos(theta) * r * SPHERE_R, y * SPHERE_R, Math.sin(theta) * r * SPHERE_R];
+  }
+
+  const state = {
+    ambientX: 0, ambientY: 0, ambientZ: 0,
+    morph: 0,  // 0 = candles, 1 = sphere
+  };
+
+  const rotate = (v, rx, ry, rz) => {
+    let [x, y, z] = v;
+    let c, s, x1, y1, z1;
+    c = Math.cos(rx); s = Math.sin(rx);
+    y1 = y * c - z * s; z1 = y * s + z * c; y = y1; z = z1;
+    c = Math.cos(ry); s = Math.sin(ry);
+    x1 = x * c + z * s; z1 = -x * s + z * c; x = x1; z = z1;
+    c = Math.cos(rz); s = Math.sin(rz);
+    x1 = x * c - y * s; y1 = x * s + y * c;
+    return [x1, y1, z];
+  };
+
+  const smoothstep = (t) => t * t * (3 - 2 * t);
+
+  const draw = () => {
+    ctx.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2;
+    // Candle row spans ~5 world units per side; unit = 8.5% of min(w,h)
+    // keeps worst-case projection (~5.6 world units, accounting for
+    // perspective amplification) inside the canvas half-extent.
+    const unit = Math.min(w, h) * 0.085;
+    const focal = unit * 15;
+    const rx = state.ambientX, ry = state.ambientY, rz = state.ambientZ;
+    const m = smoothstep(Math.max(0, Math.min(1, state.morph)));
+
+    const pts = new Array(N);
+    for (let i = 0; i < N; i++) {
+      const v = verts[i], s = sphereVerts[i];
+      const ox = v[0] * (1 - m) + s[0] * m;
+      const oy = v[1] * (1 - m) + s[1] * m;
+      const oz = v[2] * (1 - m) + s[2] * m;
+      const r = rotate([ox, oy, oz], rx, ry, rz);
+      const zDenom = focal - r[2] * unit;
+      const zFactor = zDenom > unit ? focal / zDenom : 1.6;
+      pts[i] = { x: cx + r[0] * unit * zFactor, y: cy + r[1] * unit * zFactor, z: r[2] };
+    }
+
+    const sorted = edges.map((e) => ({ e, avgZ: (pts[e.a].z + pts[e.b].z) / 2 }))
+      .sort((p, q) => p.avgZ - q.avgZ);
+
+    for (const it of sorted) {
+      const e = it.e;
+      const A = pts[e.a], B = pts[e.b];
+      const depth = Math.max(0, Math.min(1, (it.avgZ + 4) / 8));
+      const alpha = 0.10 + depth * 0.55;
+      const width = 0.45 + depth * 1.3;
+      // Up candles: off-white. Down candles: quieter navy tint.
+      // Staying on-brand — no red/green.
+      ctx.strokeStyle = e.up
+        ? `rgba(255, 251, 234, ${alpha})`
+        : `rgba(140, 170, 220, ${alpha * 0.85})`;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      ctx.moveTo(A.x, A.y);
+      ctx.lineTo(B.x, B.y);
+      ctx.stroke();
+    }
+
+    // Vertex dots — quiet when candles, brighter when sphere (constellation look)
+    for (let i = 0; i < N; i++) {
+      const p = pts[i];
+      const depth = Math.max(0, Math.min(1, (p.z + 3) / 6));
+      const r = 0.6 + depth * 1.0 + m * 1.4;
+      ctx.fillStyle = `rgba(255, 251, 234, ${(0.2 + depth * 0.5) * (0.35 + 0.65 * m)})`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  };
+
+  const loop = () => { draw(); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+
+  // Ambient rotation — irrational durations so the pattern never repeats
+  if (window.anime) {
+    anime({ targets: state, ambientY: Math.PI * 2, duration: 24000, easing: 'linear', loop: true });
+    anime({ targets: state, ambientX: Math.PI * 2, duration: 38000, easing: 'linear', loop: true });
+    anime({ targets: state, ambientZ: Math.PI * 2, duration: 60000, easing: 'linear', loop: true });
+  }
+
+  requestAnimationFrame(() => canvas.classList.add('is-ready'));
+
+  // Scroll morph: 0 → 1 across the hero section; reverses on scroll back up
+  if (window.gsap && window.ScrollTrigger && hero) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(state, {
+      morph: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.5,
+      },
+    });
+  }
+
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resize, 150);
   });
 }
 
@@ -684,7 +864,7 @@ function initHome() {
   }
 
   initHeroGrid();
-  initHeroPoly();
+  initHeroChart();
   initResumePoly();
   initProjectsScroll();
   initCardTilt();
