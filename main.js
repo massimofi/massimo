@@ -434,7 +434,10 @@ function initPoly(canvas, options = {}) {
     ctx.clearRect(0, 0, w, h);
     const cx = w / 2, cy = h / 2;
     const R = Math.min(w, h) * radiusFactor * state.scale;
-    const focal = R * 3.2;
+    // Wider focal = less perspective distortion. The previous R*3.2 let
+    // front-facing vertices grow ~1.45x and push the shape outside the
+    // canvas bounds. R*6 keeps the perspective feel while staying in frame.
+    const focal = R * 6;
     const rx = state.ambientX + state.scrollX;
     const ry = state.ambientY + state.scrollY;
     const rz = state.ambientZ;
@@ -500,7 +503,10 @@ function initPoly(canvas, options = {}) {
 function initHeroPoly() {
   initPoly(document.querySelector('.hero__poly'), {
     shape: 'ico',
-    radiusFactor: 0.38,
+    // Icosahedron vertices reach sqrt(1+phi^2)~1.9 from origin; with the
+    // new R*6 focal, max projection is ~2.0R. Radius 0.22 of the min
+    // canvas dimension keeps the full shape inside the canvas on all sides.
+    radiusFactor: 0.22,
     scrollTrigger: {
       trigger: '.hero',
       start: 'top top',
@@ -513,7 +519,8 @@ function initHeroPoly() {
 function initResumePoly() {
   initPoly(document.querySelector('.resume__poly'), {
     shape: 'oct',
-    radiusFactor: 0.42,
+    // Octahedron only reaches 1.0 from origin; radius 0.32 leaves comfort margin.
+    radiusFactor: 0.32,
     speed: 0.9,
   });
 }
