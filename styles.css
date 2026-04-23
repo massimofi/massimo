@@ -529,14 +529,19 @@ a { color: inherit; }
 
 /* Animated SVG icons on each contact card */
 .contact-icon {
-  width: 64px;
-  height: 48px;
   color: var(--fg);
   align-self: flex-start;
   margin: 8px 0 0;
   display: block;
-  overflow: visible;  /* so the email flap can fly above the rect */
+  overflow: visible;
+  transition: transform 0.4s var(--ease-out);
 }
+
+/* Email keeps its hand-drawn envelope (64x48 viewBox); the brand icons
+   use the 24x24 Simple Icons viewBox so they need a different size. */
+.contact-icon--email { width: 60px; height: 44px; }
+.contact-icon--gh,
+.contact-icon--li    { width: 48px; height: 48px; }
 
 /* Email — flap lifts up, letter peeks out */
 .ci-flap-closed, .ci-flap-open, .ci-letter {
@@ -548,12 +553,10 @@ a { color: inherit; }
 .contact-card:hover .ci-flap-open   { opacity: 1; }
 .contact-card:hover .ci-letter      { opacity: 0.9; transform: translateY(0); }
 
-/* GitHub — right eye winks into a dash */
-.ci-gh-wink { opacity: 0; }
-.ci-gh-eye,
-.ci-gh-wink { transition: opacity 0.25s var(--ease-out); }
-.contact-card:hover .ci-gh-eye--right { opacity: 0; }
-.contact-card:hover .ci-gh-wink { opacity: 1; }
+/* GitHub — Octocat lifts + rotates slightly on hover */
+.contact-card:hover .contact-icon--gh {
+  transform: scale(1.08) rotate(-4deg);
+}
 
 /* LinkedIn — whole mark flips in 3D */
 .contact-icon--li {
@@ -1178,6 +1181,15 @@ a { color: inherit; }
   color: var(--fg);
   border-color: var(--navy);
 }
+
+/* Per-brand hover colors — higher specificity than the default :hover.
+   Brand icons are much more recognizable with their actual colors, so we
+   allow them here; the default/resting state stays monochrome navy. */
+.toolkit__item[data-tool="python"]:hover    { background: #3776AB; color: #FFE873; border-color: #3776AB; }
+.toolkit__item[data-tool="sql"]:hover       { background: #00618A; color: #FFFFFF; border-color: #00618A; }
+.toolkit__item[data-tool="powerbi"]:hover   { background: #F2C811; color: #1F1F1F; border-color: #F2C811; }
+.toolkit__item[data-tool="bloomberg"]:hover { background: #FE7800; color: #1F1F1F; border-color: #FE7800; }
+.toolkit__item[data-tool="excel"]:hover     { background: #217346; color: #FFFFFF; border-color: #217346; }
 
 .toolkit__icon {
   width: 56px;
