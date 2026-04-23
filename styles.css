@@ -32,6 +32,7 @@ html, body {
 /* No-js fallback: show everything */
 html.no-js .hero__subtitle,
 html.no-js .hero__name .letter,
+html.no-js .project-card,
 html.no-js .project-card__title .title-inner,
 html.no-js .resume__title .letter,
 html.no-js .pill {
@@ -949,14 +950,77 @@ body.resume-locked .footer { display: none; }
    RESPONSIVE
    ============================================ */
 @media (max-width: 900px) {
-  .nav { padding: 16px 20px; }
-  .nav__links { gap: 18px; font-size: 10px; }
+  .nav { padding: 14px 18px; }
+  .nav__logo { font-size: 18px; }
+  .nav__logo .initial { font-size: 22px; }
+  .nav__logo .surname { font-size: 15px; }
+  .nav__links { gap: 16px; font-size: 9px; letter-spacing: 0.15em; }
 
-  .project-card {
-    width: 100vw;
-    min-width: auto;
-    padding: 60px 24px;
+  .hero__poly { width: min(92vw, 92vw); height: min(92vw, 92vw); }
+
+  /* Vertical stack of project cards — no horizontal pin on mobile */
+  .projects__horizontal {
+    height: auto;
+    overflow: visible;
   }
+  .projects__track {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    transform: none !important;
+  }
+  .project-card {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: auto;
+    padding: 56px 22px 72px;
+    border-right: none;
+    border-bottom: 1px solid var(--fg-trace);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+  }
+  .project-card.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Fanned thumbs become a clean horizontal strip on mobile */
+  .project-card__thumbs {
+    position: static;
+    transform: none;
+    width: 100%;
+    height: 90px;
+    display: flex;
+    gap: 8px;
+    margin: 0 0 24px 0;
+  }
+  .project-card__thumb {
+    position: relative;
+    flex: 1 1 0;
+    width: auto;
+    height: 100%;
+    transform: none !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  }
+  .project-card__thumbs--code {
+    height: 140px;
+  }
+  .project-card__thumbs--code .project-card__thumb--code {
+    flex: 1;
+  }
+  .code-thumb {
+    font-size: 10px;
+    line-height: 1.6;
+    padding: 12px 14px;
+  }
+
+  .project-card__middle { max-width: 100%; }
+  .project-card__title { margin-bottom: 20px; }
+  .project-card__bottom { flex-direction: column; align-items: flex-start; gap: 18px; }
+
+  .progress-bar { display: none; }
 
   .projects__header {
     padding: 60px 20px 30px;
@@ -990,4 +1054,13 @@ body.resume-locked .footer { display: none; }
   }
 
   .footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .nav { padding: 12px 14px; }
+  .nav__links { gap: 12px; font-size: 9px; letter-spacing: 0.1em; }
+  .hero__subtitle { font-size: 10px; letter-spacing: 0.25em; }
+  .project-card { padding: 48px 18px 60px; }
+  .project-card__actions { width: 100%; }
+  .project-card__action { flex: 1; justify-content: center; text-align: center; }
 }

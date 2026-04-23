@@ -547,6 +547,31 @@ function initProjectsScroll() {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Mobile: ditch the horizontal pin. Reveal each card as it scrolls into view.
+  const isMobile = window.matchMedia('(max-width: 900px)').matches;
+  if (isMobile) {
+    document.querySelectorAll('.project-card').forEach((card) => {
+      const titleEl = card.querySelector('.project-card__title');
+      if (titleEl) splitTitleWords(titleEl);
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top 85%',
+        once: true,
+        onEnter: () => {
+          card.classList.add('is-revealed');
+          anime({
+            targets: card.querySelectorAll('.title-inner'),
+            translateY: ['110%', '0%'],
+            duration: 900,
+            delay: anime.stagger(40),
+            easing: 'easeOutQuart',
+          });
+        },
+      });
+    });
+    return;
+  }
+
   const totalWidth = () => track.scrollWidth - window.innerWidth;
 
   const cards = track.querySelectorAll('.project-card');
