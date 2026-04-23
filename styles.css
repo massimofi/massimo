@@ -152,12 +152,9 @@ a { color: inherit; }
 
 .hero__poly {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* Dominant visual: the candle row stretches the hero horizontally */
-  width: min(95vh, 98vw);
-  height: min(95vh, 98vw);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   pointer-events: none;
   opacity: 0;
@@ -1213,9 +1210,9 @@ a { color: inherit; }
   .nav__links { gap: 16px; font-size: 9px; letter-spacing: 0.15em; }
 
   /* Shorter hero on mobile — 120vh is enough room for the morph to
-     complete without eating half the phone's scroll budget. */
+     complete without eating half the phone's scroll budget.
+     Canvas still fills hero__viewport (100%/100%); no override needed. */
   .hero { height: 120vh; }
-  .hero__poly { width: 96vw; height: 96vw; }
 
   /* Vertical stack of project cards — no horizontal pin on mobile */
   .projects__horizontal {

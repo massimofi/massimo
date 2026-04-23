@@ -474,11 +474,14 @@ function initHeroChart() {
 
     ctx.clearRect(0, 0, w, h);
     const cx = w / 2, cy = h / 2;
-    // Candle row spans ~5 world units per side; unit = 8.5% of min(w,h)
-    // keeps worst-case projection (~5.6 world units, accounting for
-    // perspective amplification) inside the canvas half-extent.
-    const unit = Math.min(w, h) * 0.085;
-    const focal = unit * 15;
+    // Candle row spans 9.55 world units across (10 candles, spacing 1).
+    // unit = w/10 makes the row fill ~95% of the canvas width so the
+    // chart dominates the hero. Focal = 25 unit keeps perspective
+    // amplification small so mouse-parallax tilt (±10°) never pushes
+    // vertices past the canvas bounds: worst-case projection under
+    // that tilt is ~0.46w, well inside the 0.5w half-extent.
+    const unit = w / 10;
+    const focal = unit * 25;
     const rx = state.currentRx, ry = state.currentRy, rz = 0;
     const m = smoothstep(Math.max(0, Math.min(1, state.morph)));
 
