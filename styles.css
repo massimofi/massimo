@@ -940,12 +940,13 @@ a { color: inherit; }
 }
 
 /* ============================================
-   RESUME SECTION — split layout (HTML + card)
+   RESUME SECTION — printed-resume feel: white bg, black text
    ============================================ */
 .resume {
   padding: 120px 32px 100px;
   border-top: 1px solid var(--fg-trace);
-  background: var(--navy);
+  background: #ffffff;
+  color: #111111;
 }
 
 .resume__header {
@@ -962,7 +963,7 @@ a { color: inherit; }
   font-size: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--fg-dim);
+  color: #555555;
   margin-bottom: 16px;
 }
 
@@ -972,13 +973,14 @@ a { color: inherit; }
   line-height: 1;
   letter-spacing: -0.02em;
   font-weight: 400;
+  color: #111111;
 }
 
 .resume__count {
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.3em;
-  color: var(--fg-dim);
+  color: #555555;
   text-transform: uppercase;
 }
 
@@ -989,38 +991,39 @@ a { color: inherit; }
   align-items: start;
 }
 
-/* Left: HTML resume document */
+/* Left: HTML resume rendered like a printed page */
 .resume__document {
-  border: 1px solid var(--fg-trace);
-  padding: 44px 48px;
-  /* Near-black on the navy section so the resume content reads as a darker
-     "page" sitting on top of the navy backdrop. */
-  background: var(--bg);
+  border: 1px solid #d8d8d8;
+  padding: 56px 64px;
+  background: #ffffff;
+  color: #111111;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
 }
 
 .rd__head {
-  padding-bottom: 20px;
+  padding-bottom: 18px;
   margin-bottom: 28px;
-  border-bottom: 1px solid var(--fg-trace);
+  border-bottom: 2px solid #111111;
 }
 
 .rd__name {
   font-family: var(--serif);
-  font-size: clamp(28px, 3.4vw, 40px);
+  font-size: clamp(30px, 3.6vw, 44px);
   line-height: 1.05;
   letter-spacing: -0.01em;
   font-weight: 400;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  color: #111111;
 }
 
 .rd__line {
   font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--fg-dim);
+  letter-spacing: 0.08em;
+  color: #555555;
 }
 
-.rd__section { margin-bottom: 32px; }
+.rd__section { margin-bottom: 28px; }
 .rd__section:last-child { margin-bottom: 0; }
 
 .rd__section-title {
@@ -1028,14 +1031,15 @@ a { color: inherit; }
   font-size: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--fg-dim);
-  padding-bottom: 10px;
-  margin-bottom: 18px;
-  border-bottom: 1px solid var(--fg-trace);
+  color: #111111;
+  font-weight: 400;
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #111111;
 }
 
 .rd__entry {
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 .rd__entry:last-child { margin-bottom: 0; }
 
@@ -1044,35 +1048,35 @@ a { color: inherit; }
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .rd__entry-main { flex: 1; min-width: 0; }
 
 .rd__entry-title {
   font-family: var(--serif);
-  font-size: clamp(16px, 1.4vw, 19px);
+  font-size: clamp(17px, 1.5vw, 20px);
   line-height: 1.25;
   font-weight: 400;
   letter-spacing: -0.005em;
-  color: var(--fg);
+  color: #111111;
 }
 
 .rd__entry-sub {
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: 0.02em;
-  color: var(--fg-dim);
-  margin-top: 4px;
+  color: #444444;
+  margin-top: 3px;
 }
 .rd__entry-sub em { font-style: italic; }
 
 .rd__entry-meta {
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--fg-dim);
+  color: #555555;
   text-align: right;
   white-space: nowrap;
   line-height: 1.6;
@@ -1081,7 +1085,7 @@ a { color: inherit; }
 .rd__bullets {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 4px 0 0 0;
 }
 
 .rd__bullets li {
@@ -1089,9 +1093,9 @@ a { color: inherit; }
   padding-left: 14px;
   font-family: var(--mono);
   font-size: 12px;
-  line-height: 1.7;
-  color: var(--fg-dim);
-  margin-bottom: 4px;
+  line-height: 1.65;
+  color: #222222;
+  margin-bottom: 3px;
 }
 
 .rd__bullets li::before {
@@ -1101,15 +1105,15 @@ a { color: inherit; }
   left: 0;
   width: 6px;
   height: 1px;
-  background: var(--fg-faint);
+  background: #666666;
 }
 
 .rd__bullets li strong {
-  color: var(--fg);
+  color: #111111;
   font-weight: 400;
 }
 
-.rd__bullets--inline li { margin-bottom: 10px; }
+.rd__bullets--inline li { margin-bottom: 8px; }
 
 /* Right: download card + small polyhedron */
 .resume__aside {
