@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Massimo Arellano</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav__logo" aria-label="Home">
+    <span class="initial">M</span><span class="surname">Arellano</span>
+  </a>
+  <ul class="nav__links">
+    <li><a href="#projects" data-section="projects">Projects</a></li>
+    <li><a href="#contact" data-section="contact">Contact</a></li>
+    <li><a href="resume.html" data-page="resume">Resume</a></li>
+  </ul>
+</nav>
+
+<main>
+<div data-page="home">
+
+  <section class="hero">
+    <div class="hero__grid"></div>
+    <svg class="hero__ring" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g class="hero__ring-inner">
+        <circle cx="300" cy="300" r="260" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.35"/>
+        <circle cx="300" cy="300" r="200" fill="none" stroke="currentColor" stroke-width="0.4" opacity="0.25"/>
+        <circle cx="300" cy="300" r="140" fill="none" stroke="currentColor" stroke-width="0.3" opacity="0.18"/>
+        <line x1="40" y1="300" x2="560" y2="300" stroke="currentColor" stroke-width="0.3" opacity="0.2"/>
+        <line x1="300" y1="40" x2="300" y2="560" stroke="currentColor" stroke-width="0.3" opacity="0.2"/>
+        <line x1="95" y1="95" x2="505" y2="505" stroke="currentColor" stroke-width="0.25" opacity="0.15"/>
+        <line x1="505" y1="95" x2="95" y2="505" stroke="currentColor" stroke-width="0.25" opacity="0.15"/>
+      </g>
+    </svg>
+    <div class="hero__content">
+      <h1 class="hero__name">Massimo Arellano</h1>
+      <div class="hero__subtitle">B.S. Business Administration, Finance · Cal Poly Pomona '27</div>
+    </div>
+  </section>
+
+  <section class="projects" id="projects">
+    <div class="projects__header">
+      <div>
+        <div class="projects__eyebrow">Selected Work</div>
+        <h2 class="projects__title">Projects</h2>
+      </div>
+      <div class="projects__count" data-count-to="4">00</div>
+    </div>
+
+    <div class="projects__horizontal">
+      <div class="projects__track">
+
+        <article class="project-card" data-tilt>
+          <div class="project-card__thumbs">
+            <div class="project-card__thumb"><img src="projects/thumbs/proposal-1.jpg" alt="" loading="lazy"></div>
+            <div class="project-card__thumb"><img src="projects/thumbs/proposal-5.jpg" alt="" loading="lazy"></div>
+            <div class="project-card__thumb"><img src="projects/thumbs/proposal-10.jpg" alt="" loading="lazy"></div>
+            <div class="project-card__thumb"><img src="projects/thumbs/proposal-22.jpg" alt="" loading="lazy"></div>
+          </div>
+          <div class="project-card__top">
+            <span>/ 01</span>
+            <span>2026</span>
+          </div>
+          <div class="project-card__middle">
+            <div class="project-card__meta">MISSA ITC · 2nd Place</div>
+            <h3 class="project-card__title">Data Integration Consulting Proposal</h3>
+            <p class="project-card__desc">EDA on 2,500+ transactions across 363 customers. Designed a phased 18-month data stack proposal (Snowflake, dbt, Segment).</p>
+          </div>
+          <div class="project-card__bottom">
+            <div class="project-card__tags">
+              <span class="project-card__tag"><span class="project-card__stat" data-count="13.5" data-decimals="1">0</span>× LTV Gap</span>
+              <span class="project-card__tag">Python</span>
+              <span class="project-card__tag">Power BI</span>
+              <span class="project-card__tag">Snowflake</span>
+            </div>
+            <div class="project-card__actions">
+              <button class="project-card__action project-card__action--primary"
+                data-preview="projects/data-integration-proposal.pdf"
+                data-preview-title="Data Integration Consulting Proposal"
+                data-preview-meta="Going Merry · MISSA ITC · 2nd Place · April 2026">
+                Preview Proposal
+              </button>
+              <button class="project-card__action"
+                data-preview="projects/data-integration-slides.pdf"
+                data-preview-title="Data Integration — Slides"
+                data-preview-meta="Going Merry · MISSA ITC · 2nd Place">
+                Slides
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-tilt>
+          <div class="project-card__thumbs">
+            <div class="project-card__thumb"><img src="projects/thumbs/bay-1.jpg" alt="" loading="lazy"></div>
+            <div class="project-card__thumb"><img src="projects/thumbs/bay-5.jpg" alt="" loading="lazy"></div>
+            <div class="project-card__thumb"><img src="projects/thumbs/bay-10.jpg" alt="" loading="lazy"></div>
+            <div class="project-card__thumb"><img src="projects/thumbs/bay-14.jpg" alt="" loading="lazy"></div>
+          </div>
+          <div class="project-card__top">
+            <span>/ 02</span>
+            <span>2026</span>
+          </div>
+          <div class="project-card__middle">
+            <div class="project-card__meta">Oracle Datathon · 2nd Place</div>
+            <h3 class="project-card__title">Bay Area Environmental Predictor</h3>
+            <p class="project-card__desc">Environmental decision tool for SF Bay. Oracle AutoML + APEX map with live predictions per location.</p>
+          </div>
+          <div class="project-card__bottom">
+            <div class="project-card__tags">
+              <span class="project-card__tag"><span class="project-card__stat" data-count="2">0</span>nd of 7</span>
+              <span class="project-card__tag">SQL</span>
+              <span class="project-card__tag">Oracle 26ai</span>
+              <span class="project-card__tag">AutoML</span>
+            </div>
+            <div class="project-card__actions">
+              <button class="project-card__action project-card__action--primary"
+                data-preview="projects/bay-area-predictor-slides.pdf"
+                data-preview-title="Bay Area Environmental Predictor"
+                data-preview-meta="Oracle Datathon · 2nd of 7 · April 2026">
+                Preview Slides
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-tilt>
+          <div class="project-card__thumbs project-card__thumbs--code">
+            <div class="project-card__thumb project-card__thumb--code">
+              <div class="code-thumb">
+                <div class="code-thumb__dots"><span></span><span></span><span></span></div>
+                <div class="code-thumb__line">&gt; <span class="code-thumb__cmd">git clone massimo-dcf</span></div>
+                <div class="code-thumb__line">&gt; <span class="code-thumb__cmd">cd massimo-dcf</span></div>
+                <div class="code-thumb__line">&gt; <span class="code-thumb__cmd">uvicorn backend.main:app</span></div>
+                <div class="code-thumb__line code-thumb__line--dim">&nbsp;&nbsp;INFO: Started server on :8000</div>
+                <div class="code-thumb__line code-thumb__line--dim">&nbsp;&nbsp;INFO: 500 equities loaded</div>
+                <div class="code-thumb__line code-thumb__line--dim">&nbsp;&nbsp;INFO: WebSocket ready</div>
+              </div>
+            </div>
+          </div>
+          <div class="project-card__top">
+            <span>/ 03</span>
+            <span>2025 — Present</span>
+          </div>
+          <div class="project-card__middle">
+            <div class="project-card__meta">Personal Project</div>
+            <h3 class="project-card__title">Massimo DCF</h3>
+            <p class="project-card__desc">Full-stack DCF platform. ETL from SEC EDGAR + yfinance, FastAPI + React, 10K-path Monte Carlo simulation.</p>
+          </div>
+          <div class="project-card__bottom">
+            <div class="project-card__tags">
+              <span class="project-card__tag"><span class="project-card__stat" data-count="500">0</span> Equities</span>
+              <span class="project-card__tag">FastAPI</span>
+              <span class="project-card__tag">React</span>
+              <span class="project-card__tag">PostgreSQL</span>
+            </div>
+            <div class="project-card__actions">
+              <a href="https://github.com/massimofi/massimo-dcf" class="project-card__action project-card__action--primary" target="_blank" rel="noopener">
+                View on GitHub ↗
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card" data-tilt>
+          <div class="project-card__thumbs">
+            <div class="project-card__thumb"><img src="projects/thumbs/health-1.jpg" alt="" loading="lazy"></div>
+            <div class="project-card__thumb"><img src="projects/thumbs/health-6.jpg" alt="" loading="lazy"></div>
+            <div class="project-card__thumb"><img src="projects/thumbs/health-10.jpg" alt="" loading="lazy"></div>
+            <div class="project-card__thumb"><img src="projects/thumbs/health-14.jpg" alt="" loading="lazy"></div>
+          </div>
+          <div class="project-card__top">
+            <span>/ 04</span>
+            <span>2026</span>
+          </div>
+          <div class="project-card__middle">
+            <div class="project-card__meta">Data Never Dies · 2nd Place</div>
+            <h3 class="project-card__title">Healthcare Budget Optimizer</h3>
+            <p class="project-card__desc">Random Forest on healthcare data across 20 countries. Greedy ROI optimizer deploying $100M across 81 decisions.</p>
+          </div>
+          <div class="project-card__bottom">
+            <div class="project-card__tags">
+              <span class="project-card__tag">$<span class="project-card__stat" data-count="100">0</span>M Budget</span>
+              <span class="project-card__tag">scikit-learn</span>
+              <span class="project-card__tag">pandas</span>
+              <span class="project-card__tag">Optimization</span>
+            </div>
+            <div class="project-card__actions">
+              <button class="project-card__action project-card__action--primary"
+                data-preview="projects/healthcare-slides.pdf"
+                data-preview-title="Healthcare Budget Optimizer"
+                data-preview-meta="Fintech Junkies · Data Never Dies · 2nd of 10 · March 2026">
+                Preview Slides
+              </button>
+              <a href="https://github.com/dannyphanth/DND-MapStrainIndex" class="project-card__action" target="_blank" rel="noopener">
+                GitHub ↗
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-bar__fill"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="contact__header">
+      <div>
+        <div class="contact__eyebrow">Links</div>
+        <h2 class="contact__title">Contact.</h2>
+      </div>
+      <div class="contact__count">03 / Channels</div>
+    </div>
+
+    <div class="contact__cards">
+      <a href="mailto:massimoarellano@icloud.com" class="contact-card" data-tilt data-ripple>
+        <div class="contact-card__bg"></div>
+        <div class="contact-card__inner">
+          <div class="contact-card__top">
+            <span class="contact-card__label">/ 01 · Email</span>
+            <span class="contact-card__arrow">↗</span>
+          </div>
+          <div>
+            <div class="contact-card__name">Email</div>
+            <div class="contact-card__handle">massimoarellano@icloud.com</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://github.com/massimofi" class="contact-card" data-tilt data-ripple>
+        <div class="contact-card__bg"></div>
+        <div class="contact-card__inner">
+          <div class="contact-card__top">
+            <span class="contact-card__label">/ 02 · Code</span>
+            <span class="contact-card__arrow">↗</span>
+          </div>
+          <div>
+            <div class="contact-card__name">GitHub</div>
+            <div class="contact-card__handle">@massimofi</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://www.linkedin.com/in/massimo-arellano/" class="contact-card" data-tilt data-ripple>
+        <div class="contact-card__bg"></div>
+        <div class="contact-card__inner">
+          <div class="contact-card__top">
+            <span class="contact-card__label">/ 03 · Network</span>
+            <span class="contact-card__arrow">↗</span>
+          </div>
+          <div>
+            <div class="contact-card__name">LinkedIn</div>
+            <div class="contact-card__handle">/in/massimo-arellano</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__copyright">© 2026 Massimo Arellano</div>
+    <div class="footer__copyright">Laguna Beach, CA</div>
+  </footer>
+
+</div>
+</main>
+
+<!-- PDF Preview Modal -->
+<div class="modal" id="pdfModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal__card">
+    <div class="modal__header">
+      <div>
+        <div class="modal__title" id="modalTitle">Preview</div>
+        <div class="modal__meta" id="modalMeta">Document</div>
+      </div>
+      <div class="modal__actions">
+        <a class="project-card__action" id="modalDownload" href="#" download>Download ↓</a>
+        <button class="modal__close" id="modalClose" aria-label="Close">✕</button>
+      </div>
+    </div>
+    <div class="modal__body">
+      <iframe class="modal__frame" id="modalFrame" src="" title="Document preview"></iframe>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
