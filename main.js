@@ -445,7 +445,7 @@ function initHeroChart() {
   // Rotation state:
   //   target* = what mouse position wants
   //   current* = what the draw loop actually uses (lerped toward target each frame)
-  // morph:  0 = candles, 1 = sphere (driven by scroll in task 2's label-strip).
+  // morph:  0 = candles, 1 = sphere (scrubbed by hero scroll below).
   const state = {
     targetRx: 0, targetRy: 0,
     currentRx: 0, currentRy: 0,
@@ -552,81 +552,44 @@ function initHeroChart() {
 
   requestAnimationFrame(() => canvas.classList.add('is-ready'));
 
-  // Expose the state so initLabelStrip can drive state.morph via scroll.
-  window.__heroChartState = state;
+  // Hero-scoped morph: scrub candle → sphere across the hero section.
+  // The hero-stage canvas stays visible (.is-active class added on load)
+  // so there's no visibility gating tied to a separate section anymore.
+  const stage = document.querySelector('.hero-stage');
+  if (stage) stage.classList.add('is-active');
+
+  if (window.gsap && window.ScrollTrigger && hero) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.to(state, {
+      morph: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.5,
+        invalidateOnRefresh: true,
+      },
+    });
+
+    // Fade the stage out once the user is well past the hero so the canvas
+    // doesn't keep rendering over projects.
+    ScrollTrigger.create({
+      trigger: hero,
+      start: 'top 90%',
+      end: 'bottom top',
+      onEnter:     () => stage && stage.classList.add('is-active'),
+      onEnterBack: () => stage && stage.classList.add('is-active'),
+      onLeave:     () => stage && stage.classList.remove('is-active'),
+      onLeaveBack: () => stage && stage.classList.remove('is-active'),
+    });
+  }
 
   let resizeTimeout;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(resize, 150);
   });
-}
-
-// ============================================
-// LABEL STRIP — pinned section between hero and projects
-// Drives the candle → sphere morph AND a horizontal typography drift.
-// Also toggles .hero-stage visibility so the fixed canvas only paints
-// while the hero or label-strip is on screen.
-// ============================================
-function initLabelStrip() {
-  const sec = document.querySelector('.label-strip');
-  if (!sec) return;
-  if (!window.gsap || !window.ScrollTrigger) return;
-  gsap.registerPlugin(ScrollTrigger);
-
-  const pin = sec.querySelector('.label-strip__pin');
-  const track = sec.querySelector('.label-strip__track');
-  const stage = document.querySelector('.hero-stage');
-  if (!pin || !track) return;
-
-  const isMobile = window.matchMedia('(max-width: 900px)').matches;
-
-  // --- Stage visibility: canvas is visible while hero or label-strip is on screen
-  if (stage) {
-    stage.classList.add('is-active');  // visible on load
-    ScrollTrigger.create({
-      trigger: '.hero',
-      start: 'top 90%',
-      endTrigger: sec,
-      end: 'bottom top+=80',
-      onEnter:     () => stage.classList.add('is-active'),
-      onEnterBack: () => stage.classList.add('is-active'),
-      onLeave:     () => stage.classList.remove('is-active'),
-      onLeaveBack: () => stage.classList.remove('is-active'),
-    });
-  }
-
-  // --- Desktop: pin the inner for 2 viewport-heights of scroll distance
-  if (!isMobile) {
-    ScrollTrigger.create({
-      trigger: sec,
-      start: 'top top',
-      end: () => `+=${window.innerHeight * 2}`,
-      pin,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-    });
-  }
-
-  // --- Label track slides right-to-left as a function of scroll progress
-  const trackScroll = () => {
-    return isMobile
-      ? { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true }
-      : { trigger: sec, start: 'top top', end: () => `+=${window.innerHeight * 2}`, scrub: 0.3, invalidateOnRefresh: true };
-  };
-
-  gsap.fromTo(track,
-    { x: () => window.innerWidth + 40 },
-    { x: () => -track.scrollWidth - 40, ease: 'none', scrollTrigger: trackScroll() }
-  );
-
-  // --- Drive the hero chart morph state across the same scroll range
-  if (window.__heroChartState) {
-    gsap.fromTo(window.__heroChartState,
-      { morph: 0 },
-      { morph: 1, ease: 'none', scrollTrigger: trackScroll() }
-    );
-  }
 }
 
 // ============================================
@@ -792,7 +755,6 @@ function initHome() {
 
   initHeroGrid();
   initHeroChart();
-  initLabelStrip();
   initProjectsScroll();
   initCardTilt();
   initCardRipple();
