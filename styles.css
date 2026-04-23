@@ -414,6 +414,7 @@ a { color: inherit; }
 .contact {
   padding: 120px 32px 80px;
   border-top: 1px solid var(--fg-trace);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--navy) 100%);
 }
 
 .contact__header {
@@ -555,8 +556,13 @@ a { color: inherit; }
 /* Project card tilt + hover state */
 .project-card {
   transform-style: preserve-3d;
-  transition: background 0.4s var(--ease-out);
+  transition: background 0.4s var(--ease-out), box-shadow 0.5s var(--ease-out), border-color 0.5s var(--ease-out);
   will-change: transform;
+}
+
+.project-card:hover {
+  border-right-color: var(--navy-glow);
+  box-shadow: inset 0 0 120px -40px var(--navy-glow);
 }
 
 .project-card__inner {
