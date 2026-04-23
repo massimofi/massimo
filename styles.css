@@ -414,7 +414,8 @@ a { color: inherit; }
 .contact {
   padding: 120px 32px 80px;
   border-top: 1px solid var(--fg-trace);
-  background: linear-gradient(180deg, var(--bg) 0%, var(--navy) 100%);
+  /* Resume section above is solid navy; fade back to black through contact. */
+  background: linear-gradient(180deg, var(--navy) 0%, var(--bg) 100%);
 }
 
 .contact__header {
@@ -874,6 +875,7 @@ a { color: inherit; }
 .resume {
   padding: 120px 32px 100px;
   border-top: 1px solid var(--fg-trace);
+  background: var(--navy);
 }
 
 .resume__header {
@@ -921,7 +923,9 @@ a { color: inherit; }
 .resume__document {
   border: 1px solid var(--fg-trace);
   padding: 44px 48px;
-  background: rgba(10, 10, 10, 0.4);
+  /* Near-black on the navy section so the resume content reads as a darker
+     "page" sitting on top of the navy backdrop. */
+  background: var(--bg);
 }
 
 .rd__head {
@@ -1049,7 +1053,8 @@ a { color: inherit; }
 .resume__card {
   padding: 36px;
   border: 1px solid var(--fg-faint);
-  background: var(--navy);
+  /* Section bg is navy, so the card flips to black for contrast. */
+  background: var(--bg);
   position: relative;
   overflow: hidden;
 }
