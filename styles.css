@@ -118,7 +118,7 @@ a { color: inherit; }
   bottom: 0; left: 0;
   width: 100%;
   height: 1px;
-  background: var(--fg);
+  background: var(--green);
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.4s var(--ease-out);
@@ -216,7 +216,8 @@ a { color: inherit; }
   margin-left: 0.05em;
   font-weight: 300;
   animation: caretBlink 1s steps(2, start) infinite;
-  color: var(--fg);
+  /* CPP-green caret while typing — small editorial accent. */
+  color: var(--green);
   opacity: 1;
 }
 
@@ -262,6 +263,19 @@ a { color: inherit; }
   line-height: 1;
   letter-spacing: -0.03em;
   font-weight: 600;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 12px;
+}
+.projects__title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 56px;
+  height: 3px;
+  background: var(--green);
+  border-radius: 2px;
 }
 
 .projects__count {
@@ -333,7 +347,8 @@ a { color: inherit; }
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
-  color: var(--fg);
+  /* Featured stat numbers in green — the proudest signal on each card. */
+  color: var(--green);
   font-variant-numeric: tabular-nums;
   display: inline-flex;
   align-items: baseline;
@@ -383,6 +398,12 @@ a { color: inherit; }
   color: var(--fg-dim);
   text-transform: uppercase;
   margin-bottom: 24px;
+}
+
+/* Project number slug ('/ 01' .. '/ 05') in green — small editorial spark */
+.project-card__top span:first-child {
+  color: var(--green);
+  font-weight: 600;
 }
 
 .project-card__meta {
@@ -529,11 +550,24 @@ a { color: inherit; }
 }
 
 .contact__title {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(40px, 7vw, 100px);
   line-height: 1;
-  letter-spacing: -0.02em;
-  font-weight: 400;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 12px;
+}
+.contact__title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 56px;
+  height: 3px;
+  background: var(--green);
+  border-radius: 2px;
 }
 
 .contact__title .italic { font-style: italic; }
@@ -961,12 +995,25 @@ a { color: inherit; }
 }
 
 .resume__heading {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(40px, 7vw, 100px);
   line-height: 1;
-  letter-spacing: -0.02em;
-  font-weight: 400;
+  letter-spacing: -0.03em;
+  font-weight: 600;
   color: #111111;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 12px;
+}
+.resume__heading::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 56px;
+  height: 3px;
+  background: var(--green);
+  border-radius: 2px;
 }
 
 .resume__count {
