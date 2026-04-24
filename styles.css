@@ -1236,9 +1236,11 @@ a { color: inherit; }
 
 .toolkit__item {
   padding: 14px 12px 10px;
-  border: 1px solid #dcdcdc;
-  background: #ffffff;
-  color: var(--green);
+  border: 1px solid #2a2a2a;
+  /* Dark tile on the white resume section so the off-white icon shows.
+     Hover flips the tile to the brand color. */
+  background: #1a1a1a;
+  color: var(--fg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1253,6 +1255,7 @@ a { color: inherit; }
               border-color 0.3s var(--ease-out);
 }
 
+/* Default hover (catch-all for the concept icons in Finance row) */
 .toolkit__item:hover {
   transform: scale(1.05);
   background: var(--green);
@@ -1260,20 +1263,22 @@ a { color: inherit; }
   border-color: var(--green);
 }
 
-/* Per-brand hover colors — higher specificity wins over default :hover.
-   Brand icons are much more recognizable with their actual colors. */
-.toolkit__item[data-tool="python"]:hover     { background: #3776AB; color: #FFE873; border-color: #3776AB; }
-.toolkit__item[data-tool="sql"]:hover        { background: #00618A; color: #FFFFFF; border-color: #00618A; }
-.toolkit__item[data-tool="postgresql"]:hover { background: #336791; color: #FFFFFF; border-color: #336791; }
-.toolkit__item[data-tool="powerbi"]:hover    { background: #F2C811; color: #1F1F1F; border-color: #F2C811; }
-.toolkit__item[data-tool="bloomberg"]:hover  { background: #FE7800; color: #1F1F1F; border-color: #FE7800; }
-.toolkit__item[data-tool="excel"]:hover      { background: #217346; color: #FFFFFF; border-color: #217346; }
-.toolkit__item[data-tool="fastapi"]:hover    { background: #009688; color: #FFFFFF; border-color: #009688; }
-.toolkit__item[data-tool="react"]:hover      { background: #20232A; color: #61DAFB; border-color: #20232A; }
-.toolkit__item[data-tool="typescript"]:hover { background: #3178C6; color: #FFFFFF; border-color: #3178C6; }
-.toolkit__item[data-tool="git"]:hover        { background: #F05032; color: #FFFFFF; border-color: #F05032; }
-.toolkit__item[data-tool="streamlit"]:hover  { background: #FF4B4B; color: #FFFFFF; border-color: #FF4B4B; }
-.toolkit__item[data-tool="oracle"]:hover     { background: #C74634; color: #FFFFFF; border-color: #C74634; }
+/* Per-brand hover overrides. Higher specificity than the catch-all. */
+.toolkit__item[data-tool="python"]:hover      { background: #3776AB; color: #FFE873; border-color: #3776AB; }
+.toolkit__item[data-tool="sql"]:hover         { background: #336791; color: #FFFFFF; border-color: #336791; }
+.toolkit__item[data-tool="fastapi"]:hover     { background: #009688; color: #FFFFFF; border-color: #009688; }
+.toolkit__item[data-tool="react"]:hover       { background: #20232A; color: #61DAFB; border-color: #20232A; }
+.toolkit__item[data-tool="typescript"]:hover  { background: #3178C6; color: #FFFFFF; border-color: #3178C6; }
+.toolkit__item[data-tool="git"]:hover         { background: #F05032; color: #FFFFFF; border-color: #F05032; }
+.toolkit__item[data-tool="pandas"]:hover      { background: #150458; color: #FFFFFF; border-color: #150458; }
+.toolkit__item[data-tool="scikitlearn"]:hover { background: #F7931E; color: #1F1F1F; border-color: #F7931E; }
+.toolkit__item[data-tool="postgresql"]:hover  { background: #336791; color: #FFFFFF; border-color: #336791; }
+.toolkit__item[data-tool="excel"]:hover       { background: #217346; color: #FFFFFF; border-color: #217346; }
+.toolkit__item[data-tool="powerbi"]:hover     { background: #F2C811; color: #1F1F1F; border-color: #F2C811; }
+.toolkit__item[data-tool="metabase"]:hover    { background: #509EE3; color: #FFFFFF; border-color: #509EE3; }
+.toolkit__item[data-tool="streamlit"]:hover   { background: #FF4B4B; color: #FFFFFF; border-color: #FF4B4B; }
+.toolkit__item[data-tool="oracle"]:hover      { background: #C74634; color: #FFFFFF; border-color: #C74634; }
+.toolkit__item[data-tool="bloomberg"]:hover   { background: #FE7900; color: #1F1F1F; border-color: #FE7900; }
 
 .toolkit__icon {
   width: 28px;
@@ -1293,24 +1298,6 @@ a { color: inherit; }
   letter-spacing: 0.06em;
   color: inherit;
   white-space: nowrap;
-}
-
-/* Text chip for concepts without a brand icon (DCF/WACC/CAPM, pandas,
-   scikit-learn). Same height as icon cards so rows align cleanly. */
-.toolkit__chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 0 14px;
-  height: 34px;
-  border: 1px dashed #c5c5c5;
-  color: #333333;
-  background: #fafafa;
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  border-radius: 4px;
-  align-self: center;
 }
 
 /* ============================================
