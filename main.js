@@ -374,17 +374,21 @@ function initHeroChart() {
     const sorted = edges.map((e) => ({ e, avgZ: (pts[e.a].z + pts[e.b].z) / 2 }))
       .sort((p, q) => p.avgZ - q.avgZ);
 
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
     for (const it of sorted) {
       const e = it.e;
       const A = pts[e.a], B = pts[e.b];
       const depth = Math.max(0, Math.min(1, (it.avgZ + 4) / 8));
-      const alpha = 0.10 + depth * 0.55;
-      const width = 0.45 + depth * 1.3;
-      // Up candles: off-white. Down candles: quieter navy tint.
-      // Staying on-brand — no red/green.
+      // Brighter, thicker strokes so the chart reads clearly as a candle row.
+      // alpha range 0.30 -> 0.95 (was 0.10 -> 0.65); width range 1.0 -> 3.0 (was 0.45 -> 1.75).
+      const alpha = 0.30 + depth * 0.65;
+      const width = 1.0 + depth * 2.0;
+      // Up candles: off-white. Down candles: quieter steel-blue tint.
       ctx.strokeStyle = e.up
         ? `rgba(255, 251, 234, ${alpha})`
-        : `rgba(140, 170, 220, ${alpha * 0.85})`;
+        : `rgba(160, 185, 225, ${alpha * 0.9})`;
       ctx.lineWidth = width;
       ctx.beginPath();
       ctx.moveTo(A.x, A.y);
@@ -392,13 +396,13 @@ function initHeroChart() {
       ctx.stroke();
     }
 
-    // Quiet vertex dots at each candle corner + wick tip
+    // Sharper vertex dots at each candle corner + wick tip
     for (let i = 0; i < N; i++) {
       const p = pts[i];
       const depth = Math.max(0, Math.min(1, (p.z + 3) / 6));
-      ctx.fillStyle = `rgba(255, 251, 234, ${(0.2 + depth * 0.5) * 0.55})`;
+      ctx.fillStyle = `rgba(255, 251, 234, ${(0.35 + depth * 0.55) * 0.85})`;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 0.6 + depth * 1.0, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, 1.0 + depth * 1.4, 0, Math.PI * 2);
       ctx.fill();
     }
   };
