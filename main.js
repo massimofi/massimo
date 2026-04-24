@@ -356,7 +356,7 @@ function initHeroGrid() {
 }
 
 // ============================================
-// HERO CHART — 3D candlesticks that morph into a wireframe sphere on scroll
+// HERO CHART — 3D candlesticks with mouse-parallax tilt (no scroll morph)
 // ============================================
 function initHeroChart() {
   const canvas = document.querySelector('.hero__poly');
@@ -364,7 +364,6 @@ function initHeroChart() {
   canvas.dataset.init = 'done';
 
   const ctx = canvas.getContext('2d');
-  const hero = document.querySelector('.hero');
   let w = 0, h = 0, dpr = 1;
 
   const resize = () => {
@@ -428,28 +427,14 @@ function initHeroChart() {
     edges.push({ a: base + 10, b: base + 11, up });
   }
 
-  // Fibonacci-lattice sphere — one target point per candle vertex.
-  // The existing edges keep their vertex indices, so the same 140 edges
-  // that drew the candles now draw a mesh over the sphere surface.
   const N = verts.length;
-  const SPHERE_R = 2.4;
-  const sphereVerts = new Array(N);
-  const golden = Math.PI * (3 - Math.sqrt(5));
-  for (let i = 0; i < N; i++) {
-    const y = 1 - (i / (N - 1)) * 2;
-    const r = Math.sqrt(Math.max(0, 1 - y * y));
-    const theta = golden * i;
-    sphereVerts[i] = [Math.cos(theta) * r * SPHERE_R, y * SPHERE_R, Math.sin(theta) * r * SPHERE_R];
-  }
 
   // Rotation state:
   //   target* = what mouse position wants
   //   current* = what the draw loop actually uses (lerped toward target each frame)
-  // morph:  0 = candles, 1 = sphere (scrubbed by hero scroll below).
   const state = {
     targetRx: 0, targetRy: 0,
     currentRx: 0, currentRy: 0,
-    morph: 0,
   };
 
   const rotate = (v, rx, ry, rz) => {
@@ -463,8 +448,6 @@ function initHeroChart() {
     x1 = x * c - y * s; y1 = x * s + y * c;
     return [x1, y1, z];
   };
-
-  const smoothstep = (t) => t * t * (3 - 2 * t);
 
   const LERP = 0.08;
   const draw = () => {
@@ -483,15 +466,11 @@ function initHeroChart() {
     const unit = w / 10;
     const focal = unit * 25;
     const rx = state.currentRx, ry = state.currentRy, rz = 0;
-    const m = smoothstep(Math.max(0, Math.min(1, state.morph)));
 
     const pts = new Array(N);
     for (let i = 0; i < N; i++) {
-      const v = verts[i], s = sphereVerts[i];
-      const ox = v[0] * (1 - m) + s[0] * m;
-      const oy = v[1] * (1 - m) + s[1] * m;
-      const oz = v[2] * (1 - m) + s[2] * m;
-      const r = rotate([ox, oy, oz], rx, ry, rz);
+      const v = verts[i];
+      const r = rotate([v[0], v[1], v[2]], rx, ry, rz);
       const zDenom = focal - r[2] * unit;
       const zFactor = zDenom > unit ? focal / zDenom : 1.6;
       pts[i] = { x: cx + r[0] * unit * zFactor, y: cy + r[1] * unit * zFactor, z: r[2] };
@@ -518,14 +497,13 @@ function initHeroChart() {
       ctx.stroke();
     }
 
-    // Vertex dots — quiet when candles, brighter when sphere (constellation look)
+    // Quiet vertex dots at each candle corner + wick tip
     for (let i = 0; i < N; i++) {
       const p = pts[i];
       const depth = Math.max(0, Math.min(1, (p.z + 3) / 6));
-      const r = 0.6 + depth * 1.0 + m * 1.4;
-      ctx.fillStyle = `rgba(255, 251, 234, ${(0.2 + depth * 0.5) * (0.35 + 0.65 * m)})`;
+      ctx.fillStyle = `rgba(255, 251, 234, ${(0.2 + depth * 0.5) * 0.55})`;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, 0.6 + depth * 1.0, 0, Math.PI * 2);
       ctx.fill();
     }
   };
@@ -554,25 +532,6 @@ function initHeroChart() {
   document.addEventListener('mouseleave', resetTilt);
 
   requestAnimationFrame(() => canvas.classList.add('is-ready'));
-
-  // Morph scrubs while the hero's sticky inner is still stuck at the
-  // viewport. Hero is 150vh and the sticky is 100vh, so sticky releases
-  // at 50vh of scroll — we complete the morph exactly there, and the
-  // finished sphere then scrolls up naturally with the rest of the hero.
-  if (window.gsap && window.ScrollTrigger && hero) {
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.to(state, {
-      morph: 1,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: () => `+=${window.innerHeight * 0.5}`,
-        scrub: 0.4,
-        invalidateOnRefresh: true,
-      },
-    });
-  }
 
   let resizeTimeout;
   window.addEventListener('resize', () => {
