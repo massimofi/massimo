@@ -588,28 +588,30 @@ function initProjectsScroll() {
       trigger: '.projects__horizontal',
       start: 'top top',
       // Extra distance so the dwell segments have room to feel
-      end: () => `+=${totalWidth() * 1.95}`,
+      end: () => `+=${totalWidth() * 1.25}`,
       pin: true,
       scrub: true,
       invalidateOnRefresh: true,
     }
   });
 
-  // 4 cards means 3 transitions. Each segment: dwell on card, then travel to next.
-  // Tuning: with end=1.95 * totalWidth and these fractions, hold-per-card in
-  // scroll units is 0.52/4.03 * 1.95 ≈ 0.252 of totalWidth (was 0.167 before,
-  // so ~50% more dwell per card). Travel-per-card stays near 0.315 — unchanged.
-  const holdFraction = 0.52;
-  const travelFraction = 0.65;
+  // Each segment: short dwell on card, then travel to next.
+  // Tuning goal: brisk, controllable — roughly 35% less scroll per card
+  // than the previous setup. For the 5-card layout the per-card scroll
+  // drops from ~0.25 of totalWidth to ~0.10, and total pin distance
+  // drops from 1.95 * totalWidth to 1.25 * totalWidth.
+  const holdFraction = 0.30;
+  const travelFraction = 0.55;
   const segments = n - 1;      // number of transitions
 
   for (let i = 0; i < segments; i++) {
     const from = -(i * window.innerWidth);
     const to = -((i + 1) * window.innerWidth);
-    // Hold on current card
+    // Brief hold on current card
     tl.to(track, { x: from, duration: holdFraction, ease: 'none' });
-    // Travel to next card with eased motion
-    tl.to(track, { x: to, duration: travelFraction, ease: 'power2.inOut' });
+    // Travel to next card with an expo ease — feels smoother at both
+    // ends of the transition than power2 did.
+    tl.to(track, { x: to, duration: travelFraction, ease: 'expo.inOut' });
   }
   // Final hold on last card
   tl.to(track, { x: -(segments * window.innerWidth), duration: holdFraction, ease: 'none' });
@@ -623,7 +625,7 @@ function initProjectsScroll() {
     ScrollTrigger.create({
       trigger: '.projects__horizontal',
       start: 'top top',
-      end: () => `+=${totalWidth() * 1.95}`,
+      end: () => `+=${totalWidth() * 1.25}`,
       scrub: true,
       onEnter: () => progressBar && progressBar.classList.add('is-active'),
       onEnterBack: () => progressBar && progressBar.classList.add('is-active'),
