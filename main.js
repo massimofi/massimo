@@ -387,10 +387,11 @@ function initHeroChart() {
       // alpha range 0.30 -> 0.95 (was 0.10 -> 0.65); width range 1.0 -> 3.0 (was 0.45 -> 1.75).
       const alpha = 0.30 + depth * 0.65;
       const width = 1.0 + depth * 2.0;
-      // Up candles: off-white. Down candles: quieter steel-blue tint.
+      // Up candles: off-white. Down candles: muted CPP-green tint —
+      // sits on the same green-led palette as the rest of the site.
       ctx.strokeStyle = e.up
         ? `rgba(255, 251, 234, ${alpha})`
-        : `rgba(160, 185, 225, ${alpha * 0.9})`;
+        : `rgba(150, 200, 165, ${alpha * 0.9})`;
       ctx.lineWidth = width;
       ctx.beginPath();
       ctx.moveTo(A.x, A.y);
