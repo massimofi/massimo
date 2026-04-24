@@ -304,7 +304,7 @@ a { color: inherit; }
 .project__stat-value {
   font-family: var(--sans);
   font-size: clamp(48px, 6vw, 84px);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
   color: var(--fg);
@@ -319,6 +319,23 @@ a { color: inherit; }
   font-weight: 500;
   color: var(--fg-dim);
   letter-spacing: -0.01em;
+}
+
+/* Ordinal superscript for placement stats (2ND, etc.) */
+.project__stat-value sup {
+  font-size: 0.38em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--fg-dim);
+  margin-left: 0.04em;
+  position: relative;
+  top: -0.55em;
+  line-height: 0;
+}
+
+/* Word-style variant (DCF, PEP) — slight tracking for acronym feel */
+.project__stat-value--word {
+  letter-spacing: -0.015em;
 }
 
 .project__stat-label {
