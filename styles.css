@@ -155,6 +155,32 @@ a { color: inherit; }
   overflow: hidden;
 }
 
+/* Subtle dot-grid texture behind the chart and name. Two layers — small
+   off-white dots and offset green dots — at very low opacity. Drifts
+   slowly so the texture lives without being distracting. */
+.hero__viewport::before {
+  content: '';
+  position: absolute;
+  inset: -40px;  /* let the pattern bleed past the edges as it drifts */
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(255, 251, 234, 0.05) 1px, transparent 1.4px),
+    radial-gradient(circle, rgba(31, 96, 50, 0.07) 1px, transparent 1.4px);
+  background-size: 28px 28px, 28px 28px;
+  background-position: 0 0, 14px 14px;
+  animation: heroPatternDrift 70s linear infinite;
+}
+
+@keyframes heroPatternDrift {
+  0%   { background-position: 0 0,           14px 14px; }
+  100% { background-position: 28px 28px,     42px 42px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__viewport::before { animation: none; }
+}
+
 .hero__poly {
   position: absolute;
   inset: 0;
