@@ -1,7 +1,7 @@
 /* ============================================
    Massimo Arellano — Portfolio
    ============================================ */
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   --bg: #0a0a0a;
@@ -11,8 +11,13 @@
   --fg-trace: rgba(255, 251, 234, 0.08);
   --navy: #0a1628;
   --navy-glow: rgba(40, 80, 160, 0.35);
-  --serif: 'DM Serif Display', Georgia, serif;
-  --mono: 'DM Mono', ui-monospace, monospace;
+  /* --display is kept for the one serif moment (hero name). Everything
+     else uses --sans (Inter). --serif and --mono are aliased back to
+     --sans so legacy var(...) references still resolve to Inter. */
+  --sans: 'Inter', system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+  --display: 'DM Serif Display', Georgia, serif;
+  --serif: var(--sans);
+  --mono: var(--sans);
   --ease: cubic-bezier(0.7, 0, 0.3, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -22,8 +27,8 @@
 html, body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--mono);
-  font-weight: 300;
+  font-family: var(--sans);
+  font-weight: 400;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -165,7 +170,8 @@ a { color: inherit; }
 }
 
 .hero__name {
-  font-family: var(--serif);
+  /* The one serif moment in the whole site. Everything else is Inter. */
+  font-family: var(--display);
   font-size: clamp(48px, 11vw, 170px);
   line-height: 1;
   font-weight: 400;
