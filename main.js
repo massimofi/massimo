@@ -255,107 +255,6 @@ function splitTitleWords(el) {
 }
 
 // ============================================
-// DRIFTING DOTS (hero background) — canvas
-// Simple, reliable, no library dependencies
-// ============================================
-function initHeroGrid() {
-  const container = document.querySelector('.hero__grid');
-  if (!container || container.dataset.init === 'done') return;
-  container.dataset.init = 'done';
-
-  // Replace the SVG container with a canvas
-  let canvas = container.querySelector('canvas');
-  if (!canvas) {
-    canvas = document.createElement('canvas');
-    canvas.style.position = 'absolute';
-    canvas.style.inset = '0';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.display = 'block';
-    // Clear the SVG element's interior and append canvas
-    container.innerHTML = '';
-    container.appendChild(canvas);
-  }
-
-  const ctx = canvas.getContext('2d');
-  let dots = [];
-  let w = 0, h = 0, dpr = 1;
-  let rafId = null;
-
-  const resize = () => {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = container.clientWidth;
-    h = container.clientHeight;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(dpr, dpr);
-  };
-  resize();
-
-  // Build dots
-  const DOT_COUNT = 140;
-  dots = [];
-  for (let i = 0; i < DOT_COUNT; i++) {
-    dots.push({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: 1.0 + Math.random() * 1.8,
-      baseOp: 0.25 + Math.random() * 0.35,
-      vx: (Math.random() - 0.5) * 0.15,
-      vy: (Math.random() - 0.5) * 0.15,
-      phase: Math.random() * Math.PI * 2,
-    });
-  }
-
-  const draw = (t) => {
-    const time = t / 1000;
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#fffbea';
-
-    for (let i = 0; i < dots.length; i++) {
-      const d = dots[i];
-      d.x += d.vx;
-      d.y += d.vy;
-
-      // Wrap around edges
-      if (d.x < -5) d.x = w + 5;
-      if (d.x > w + 5) d.x = -5;
-      if (d.y < -5) d.y = h + 5;
-      if (d.y > h + 5) d.y = -5;
-
-      // Gentle breathing opacity
-      const breath = 0.7 + 0.3 * Math.sin(time * 0.4 + d.phase);
-      const op = d.baseOp * breath;
-
-      ctx.globalAlpha = op;
-      ctx.beginPath();
-      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-
-    rafId = requestAnimationFrame(draw);
-  };
-
-  if (rafId) cancelAnimationFrame(rafId);
-  rafId = requestAnimationFrame(draw);
-
-  let resizeTimeout;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      resize();
-      // Re-seed dot positions to new viewport
-      dots.forEach((d) => {
-        if (d.x > w) d.x = Math.random() * w;
-        if (d.y > h) d.y = Math.random() * h;
-      });
-    }, 200);
-  });
-}
-
-// ============================================
 // HERO CHART — 3D candlesticks with mouse-parallax tilt (no scroll morph)
 // ============================================
 function initHeroChart() {
@@ -703,7 +602,6 @@ function initHome() {
     });
   }
 
-  initHeroGrid();
   initHeroChart();
   initProjectsScroll();
   initCardTilt();
