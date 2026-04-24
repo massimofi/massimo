@@ -10,10 +10,12 @@ let lenis;
 function initLenis() {
   if (typeof Lenis === 'undefined') return;
   lenis = new Lenis({
-    // lerp: 1 means no smoothing — scroll is instant, 1:1 with input
-    lerp: 1,
+    // Inertial smoothing — lerp 0.085 gives a buttery slide-to-stop feel
+    // without making the scroll feel laggy on quick wheel ticks.
+    lerp: 0.085,
     smoothWheel: true,
     wheelMultiplier: 1.0,
+    touchMultiplier: 2.0,
   });
 
   lenis.on('scroll', () => {

@@ -39,6 +39,13 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Section-snap behavior — gentle ('proximity', not 'mandatory') so the
+   page lightly locks onto each project as you stop scrolling, but fast
+   flicks still scroll freely past. Plays with Lenis's lerped scroll. */
+html {
+  scroll-snap-type: y proximity;
+}
+
 /* No-js fallback: show everything */
 html.no-js .hero__subtitle,
 html.no-js .project,
@@ -302,6 +309,11 @@ a { color: inherit; }
   border-top: 1px solid var(--fg-trace);
   position: relative;
   transition: box-shadow 0.6s var(--ease-out);
+  /* Lock-style scroll: when the user pauses near a card boundary,
+     the page eases that card into place. Proximity (not mandatory) so
+     fast flicks still scroll freely. */
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
 }
 
 .project:hover {
