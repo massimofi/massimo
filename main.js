@@ -167,13 +167,9 @@ function initNumberMorph() {
     const target = parseFloat(el.dataset.count);
     const decimals = parseInt(el.dataset.decimals || '0', 10);
 
-    // Find the closest pinned container so we trigger during horizontal scroll
-    const horizontal = document.querySelector('.projects__horizontal');
-
     ScrollTrigger.create({
       trigger: el,
-      start: 'left 90%',
-      containerAnimation: window.__projectsScrollTween || undefined,
+      start: 'top 90%',
       once: true,
       onEnter: () => {
         const obj = { v: 0 };
@@ -443,117 +439,32 @@ function initHeroChart() {
 // PROJECTS HORIZONTAL SCROLL
 // ============================================
 function initProjectsScroll() {
-  const track = document.querySelector('.projects__track');
-  if (!track || track.dataset.init === 'done') return;
-  track.dataset.init = 'done';
+  const list = document.querySelector('.projects__list');
+  if (!list || list.dataset.init === 'done') return;
+  list.dataset.init = 'done';
   if (!window.gsap || !window.ScrollTrigger) return;
-
   gsap.registerPlugin(ScrollTrigger);
 
-  // Mobile: ditch the horizontal pin. Reveal each card as it scrolls into view.
-  const isMobile = window.matchMedia('(max-width: 900px)').matches;
-  if (isMobile) {
-    document.querySelectorAll('.project-card').forEach((card) => {
-      const titleEl = card.querySelector('.project-card__title');
-      if (titleEl) splitTitleWords(titleEl);
-      ScrollTrigger.create({
-        trigger: card,
-        start: 'top 85%',
-        once: true,
-        onEnter: () => {
-          card.classList.add('is-revealed');
-          anime({
-            targets: card.querySelectorAll('.title-inner'),
-            translateY: ['110%', '0%'],
-            duration: 900,
-            delay: anime.stagger(40),
-            easing: 'easeOutQuart',
-          });
-        },
-      });
-    });
-    return;
-  }
-
-  const totalWidth = () => track.scrollWidth - window.innerWidth;
-
-  const cards = track.querySelectorAll('.project-card');
-  const n = cards.length;
-
-  // Build a stepped animation: scroll slows (dwells) on each card, then moves quickly to next
-  // We use a timeline with `hold` segments between the `travel` segments
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: '.projects__horizontal',
-      start: 'top top',
-      // Extra distance so the dwell segments have room to feel
-      end: () => `+=${totalWidth() * 1.25}`,
-      pin: true,
-      scrub: true,
-      invalidateOnRefresh: true,
-    }
-  });
-
-  // Each segment: short dwell on card, then travel to next.
-  // Tuning goal: brisk, controllable — roughly 35% less scroll per card
-  // than the previous setup. For the 5-card layout the per-card scroll
-  // drops from ~0.25 of totalWidth to ~0.10, and total pin distance
-  // drops from 1.95 * totalWidth to 1.25 * totalWidth.
-  const holdFraction = 0.30;
-  const travelFraction = 0.55;
-  const segments = n - 1;      // number of transitions
-
-  for (let i = 0; i < segments; i++) {
-    const from = -(i * window.innerWidth);
-    const to = -((i + 1) * window.innerWidth);
-    // Brief hold on current card
-    tl.to(track, { x: from, duration: holdFraction, ease: 'none' });
-    // Travel to next card with an expo ease — feels smoother at both
-    // ends of the transition than power2 did.
-    tl.to(track, { x: to, duration: travelFraction, ease: 'expo.inOut' });
-  }
-  // Final hold on last card
-  tl.to(track, { x: -(segments * window.innerWidth), duration: holdFraction, ease: 'none' });
-
-  window.__projectsScrollTween = tl;
-  const scrollTween = tl;
-
-  const progressBar = document.querySelector('.progress-bar');
-  const progressFill = document.querySelector('.progress-bar__fill');
-  if (progressFill) {
-    ScrollTrigger.create({
-      trigger: '.projects__horizontal',
-      start: 'top top',
-      end: () => `+=${totalWidth() * 1.25}`,
-      scrub: true,
-      onEnter: () => progressBar && progressBar.classList.add('is-active'),
-      onEnterBack: () => progressBar && progressBar.classList.add('is-active'),
-      onLeave: () => progressBar && progressBar.classList.remove('is-active'),
-      onLeaveBack: () => progressBar && progressBar.classList.remove('is-active'),
-      onUpdate: (self) => {
-        progressFill.style.width = (self.progress * 100) + '%';
-      }
-    });
-  }
-
-  // Reveal each card's title as it enters
-  document.querySelectorAll('.project-card').forEach((card) => {
-    const titleEl = card.querySelector('.project-card__title');
+  // Each .project is a full-viewport split row. Reveal its visual (left)
+  // and body (right) with a staggered slide-in once the row is in view.
+  document.querySelectorAll('.project').forEach((row) => {
+    const titleEl = row.querySelector('.project-card__title');
     if (titleEl) splitTitleWords(titleEl);
 
     ScrollTrigger.create({
-      trigger: card,
-      containerAnimation: scrollTween,
-      start: 'left 80%',
+      trigger: row,
+      start: 'top 80%',
+      once: true,
       onEnter: () => {
+        row.classList.add('is-revealed');
         anime({
-          targets: card.querySelectorAll('.title-inner'),
+          targets: row.querySelectorAll('.title-inner'),
           translateY: ['110%', '0%'],
           duration: 900,
           delay: anime.stagger(40),
           easing: 'easeOutQuart',
         });
-      }
+      },
     });
   });
 }
