@@ -960,14 +960,26 @@ a { color: inherit; }
   align-items: start;
 }
 
-/* Left: HTML resume rendered like a printed page */
+/* Left: HTML resume rendered like a printed page.
+   max-height + overflow-y: auto makes the long master content scrollable
+   inside its column at desktop, so the right-hand toolkit stays anchored
+   even when the resume runs longer than the viewport. */
 .resume__document {
   border: 1px solid #d8d8d8;
-  padding: 48px 56px;
+  padding: 40px 44px;
   background: #ffffff;
   color: #111111;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
   font-family: var(--sans);
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c9c9c9 transparent;
+}
+.resume__document::-webkit-scrollbar { width: 6px; }
+.resume__document::-webkit-scrollbar-thumb {
+  background: #c9c9c9;
+  border-radius: 4px;
 }
 
 .rd__head {
@@ -1088,6 +1100,51 @@ a { color: inherit; }
 }
 
 .rd__bullets--inline li { margin-bottom: 5px; }
+
+/* Sub-lead under Education for the two coursework headers */
+.rd__sublead {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  font-style: italic;
+  color: #222222;
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
+/* Plain paragraph inside an entry (used for coursework lists) */
+.rd__para {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #222222;
+  margin: 0;
+}
+
+/* Skills as a definition list — category label + comma list, two columns
+   in print-page tradition. dt = category, dd = items. */
+.rd__skills {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 4px 14px;
+  margin: 0;
+}
+.rd__skills dt {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.45;
+}
+.rd__skills dd {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #222222;
+  margin: 0;
+}
 
 /* Right: download card + small polyhedron */
 .resume__aside {
