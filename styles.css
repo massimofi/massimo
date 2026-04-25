@@ -1039,6 +1039,48 @@ a { color: inherit; }
   align-items: start;
 }
 
+/* Placeholder block sitting where the rendered resume used to live.
+   Stays gray and neutral until the rendered version comes back. */
+.resume__placeholder {
+  border: 1px dashed #c5c5c5;
+  background: #efefef;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 32px;
+}
+
+.resume__placeholder-inner {
+  text-align: center;
+  max-width: 320px;
+}
+
+.resume__placeholder-eyebrow {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #888888;
+  margin-bottom: 14px;
+}
+
+.resume__placeholder-text {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: #4a4a4a;
+  margin-bottom: 6px;
+}
+
+.resume__placeholder-sub {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #777777;
+}
+
 /* Left: HTML resume rendered like a printed page.
    max-height + overflow-y: auto makes the long master content scrollable
    inside its column at desktop, so the right-hand toolkit stays anchored
