@@ -37,6 +37,77 @@ function initLenis() {
 }
 
 // ============================================
+// PROJECT SNAP — soft "lock onto each slide" behavior driven by Lenis.
+// When the user pauses while inside the projects list, ease the page
+// to the nearest project boundary. Quick flicks pass through.
+// ============================================
+function initProjectSnap() {
+  if (typeof window === 'undefined' || !window.lenis) return;
+  // Skip on mobile — touch flicks already feel right and snap fights gestures.
+  if (window.matchMedia('(max-width: 900px)').matches) return;
+
+  const projects = Array.from(document.querySelectorAll('.project'));
+  const list = document.querySelector('.projects__list');
+  if (!projects.length || !list) return;
+
+  const SETTLE_MS = 140;          // wait for scroll to actually stop
+  const SNAP_RANGE_FRAC = 0.32;   // only snap if within 32% of viewport
+  const ALIGN_TOL = 6;            // already-aligned tolerance (px)
+  const VEL_TOL = 0.5;            // Lenis velocity considered "stopped"
+  let settleTimer = null;
+  let snapping = false;
+
+  const tryToSnap = () => {
+    if (snapping) return;
+    const modal = document.getElementById('pdfModal');
+    if (modal && modal.classList.contains('is-open')) return;
+
+    const sy = window.scrollY;
+    const vh = window.innerHeight;
+
+    // Only snap while the user is reading the projects list. Outside
+    // that range (in hero, resume, contact), let scroll flow freely.
+    const listRect = list.getBoundingClientRect();
+    const listTop = listRect.top + sy;
+    const listBottom = listTop + list.offsetHeight;
+    if (sy < listTop - vh * 0.4) return;
+    if (sy > listBottom - vh * 0.4) return;
+
+    let target = null;
+    let bestOffset = vh * SNAP_RANGE_FRAC;
+    for (const p of projects) {
+      const top = p.getBoundingClientRect().top + sy;
+      const offset = Math.abs(top - sy);
+      if (offset < bestOffset) {
+        bestOffset = offset;
+        target = p;
+      }
+    }
+    if (!target) return;
+
+    const targetTop = target.getBoundingClientRect().top + sy;
+    if (Math.abs(targetTop - sy) <= ALIGN_TOL) return;
+
+    snapping = true;
+    window.lenis.scrollTo(target, {
+      duration: 0.7,
+      easing: (t) => 1 - Math.pow(1 - t, 3), // ease-out cubic
+      onComplete: () => { snapping = false; },
+    });
+    // Safety release in case onComplete doesn't fire
+    setTimeout(() => { snapping = false; }, 1400);
+  };
+
+  window.lenis.on('scroll', () => {
+    if (snapping) return;
+    clearTimeout(settleTimer);
+    const vel = Math.abs(window.lenis.velocity || 0);
+    if (vel > VEL_TOL) return; // still scrolling — wait
+    settleTimer = setTimeout(tryToSnap, SETTLE_MS);
+  });
+}
+
+// ============================================
 // PDF PREVIEW MODAL
 // ============================================
 function initPdfModal() {
@@ -524,6 +595,7 @@ function initHome() {
 
   initHeroChart();
   initProjectsScroll();
+  initProjectSnap();
   initCardTilt();
   initCardRipple();
   initNumberMorph();
