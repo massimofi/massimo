@@ -510,10 +510,12 @@ function initHome() {
   }
 
   if (window.anime) {
+    // Subtitle is positioned with transform: translateX(-50%) for
+    // bottom-center pinning — animate opacity only so anime doesn't
+    // overwrite that transform.
     anime({
       targets: '.hero__subtitle',
       opacity: [0, 1],
-      translateY: [10, 0],
       duration: 900,
       delay: 900,
       easing: 'easeOutQuart',

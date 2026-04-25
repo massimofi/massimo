@@ -233,13 +233,34 @@ a { color: inherit; }
 }
 
 .hero__subtitle {
-  font-family: var(--mono);
+  /* Pinned to the bottom of the hero viewport so it sits clear of the
+     candle chart and the centered name — easy to read without
+     anything painting over it. */
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: calc(100% - 48px);
+  max-width: 720px;
+  text-align: center;
+  font-family: var(--sans);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--fg-dim);
-  margin-top: 24px;
+  margin: 0;
   opacity: 0;
+}
+
+@media (max-width: 480px) {
+  .hero__subtitle {
+    bottom: 28px;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    line-height: 1.5;
+  }
 }
 
 /* ============================================
