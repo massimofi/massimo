@@ -6,3 +6,10 @@ Thumbs.db
 node_modules/
 .reference/
 Massimo_Arellano_Resume_MASTER.docx
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
